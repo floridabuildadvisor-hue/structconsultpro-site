@@ -398,9 +398,9 @@
     <div class="wrap" style="padding:0">
       <h2>Request a quantity takeoff</h2>
       <p>Tell us about the project and attach your drawings. Scope, timeline, and cost get confirmed before anything starts, so there is nothing to commit to yet by filling this in.</p>
-      <!-- Intake: set action to the Formspree endpoint (https://formspree.io/f/<form id>) to enable uploads.
-           With no action, the form falls back to opening a prefilled email. -->
-      <form id="project-form" method="POST" enctype="multipart/form-data" novalidate>
+      <!-- Replace YOUR_FORM_ID with your actual Formspree form ID -->
+      <!-- While the placeholder is in place, the script keeps the prefilled-email fallback so the live form never posts to a non-existent endpoint. -->
+      <form id="project-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <fieldset>
@@ -448,12 +448,12 @@
           </div>
           <div class="field upload-only">
             <label for="plans">Project plans and drawings <span aria-hidden="true">*</span></label>
-            <input id="plans" name="plans" type="file" multiple accept=".pdf,.dwg,.zip,.rar,.jpg,.jpeg,.png" required>
-            <p class="hint">PDF, DWG, ZIP or image files. Up to 10 files, 25 MB each, 100 MB in total. Larger plan sets: email them to the address below.</p>
+            <input id="plans" name="plans" type="file" multiple accept=".pdf,.dwg,.dxf,.zip,.rar,.7z,.jpg,.jpeg,.png" required>
+            <p class="hint">PDF, DWG, DXF, ZIP or image files. Multiple files allowed. Up to 10 files, 25 MB each, 100 MB in total. Larger plan sets: email them to the address below.</p>
           </div>
         </fieldset>
         <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings and specifications there (PDF, image, or CAD export) and send.</p>
-        <p class="privacy-note">What you send here is used only to prepare and review your takeoff.</p>
+        <p class="privacy-note">Your project details and files are used solely to prepare your quantity takeoff and to communicate with you about the request. Files are transmitted via our form provider and delivered to our secure email. We do not sell your information.</p>
         <div>
           <button class="btn btn-primary" type="submit">Send takeoff request</button>
         </div>
@@ -505,7 +505,7 @@
     </div>
     <div class="foot-bottom">
       <span>&copy; 2026 StructConsultPro Engineering LLC</span>
-      <span>Quantity takeoff and documentation services only. Not a substitute for a licensed engineer's seal where one is required.</span>
+      <span>Quantity takeoff services only. Not a substitute for a licensed engineer's seal where one is required.</span>
     </div>
   </div>
 </footer>
@@ -516,7 +516,7 @@
   var confirm = document.getElementById('confirm');
   var formError = document.getElementById('form-error');
   var endpoint = form.getAttribute('action') || '';
-  var uploadMode = endpoint !== '';
+  var uploadMode = endpoint !== '' && endpoint.indexOf('YOUR_FORM_ID') === -1;
   // Remove the parts of the form that do not apply to the active intake mode.
   form.querySelectorAll(uploadMode ? '.mailto-only' : '.upload-only').forEach(function(el){ el.remove(); });
 
