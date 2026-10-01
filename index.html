@@ -1,21 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
 <title>StructConsultPro | Quantity Takeoffs and Bid Support for Florida Contractors</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="StructConsultPro turns construction drawings and specifications into organized quantity takeoffs and material lists ready for your bid, for small and mid size contractors in Florida.">
+<meta name="description" content="StructConsultPro turns construction drawings and specifications into organized quantity takeoffs ready for your bid, for small and mid size contractors in Florida.">
+<link rel="icon" type="image/svg+xml" href="assets/BRAND_Favicon.svg">
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0F2A44">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="StructConsultPro">
 <meta property="og:title" content="StructConsultPro | Quantity Takeoffs and Bid Support for Florida Contractors">
-<meta property="og:description" content="Send your drawings and specifications. Get back an organized quantity takeoff and a material list ready for your bid.">
+<meta property="og:description" content="Send your drawings and specifications. Get back an organized quantity takeoff ready for your bid.">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="StructConsultPro | Quantity Takeoffs and Bid Support">
-<meta name="twitter:description" content="Send your drawings and specifications. Get back an organized quantity takeoff and a material list ready for your bid.">
+<meta name="twitter:description" content="Send your drawings and specifications. Get back an organized quantity takeoff ready for your bid.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  "name": "StructConsultPro Engineering LLC",
+  "name": "StructConsultPro",
+  "legalName": "STRUCTCONSULTPRO ENGINEERING LLC",
   "description": "Quantity takeoffs and bid support for small and mid size general contractors and remodelers in Florida.",
   "areaServed": { "@type": "State", "name": "Florida" },
   "address": { "@type": "PostalAddress", "addressLocality": "Miami", "addressRegion": "FL", "addressCountry": "US" },
@@ -44,10 +50,10 @@
   */
   :root{
     --primary:#0F2A44; --primary-ink:#FFFFFF;
-    --secondary:#C1712F; --accent:#226B7A;
+    --secondary:#4A5D6B; --accent:#226B7A;
     --bg:#FFFFFF; --surface:#F5F6F8; --border:#E2E5EA;
     --text:#1A1F26; --muted:#6B7280;
-    --font-display:'Space Grotesk',system-ui,sans-serif;
+    --font-display:'Inter',system-ui,sans-serif;
     --font-body:'Inter',system-ui,sans-serif;
     --font-mono:'IBM Plex Mono',ui-monospace,monospace;
     --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:32px; --sp-5:48px; --sp-6:64px; --sp-7:96px;
@@ -58,14 +64,14 @@
     :root:not([data-theme="light"]){
       --bg:#0F1417; --surface:#171D22; --border:#262E35;
       --text:#EDEFF2; --muted:#9AA3AD; --primary-ink:#0F1417;
-      --wordmark-color:var(--text);
+      --wordmark-color:var(--text); --secondary:#7C93A3;
       color-scheme:dark;
     }
   }
   :root[data-theme="dark"]{
     --bg:#0F1417; --surface:#171D22; --border:#262E35;
     --text:#EDEFF2; --muted:#9AA3AD; --primary-ink:#0F1417;
-    --wordmark-color:var(--text);
+    --wordmark-color:var(--text); --secondary:#7C93A3;
     color-scheme:dark;
   }
   *{box-sizing:border-box}
@@ -99,7 +105,13 @@
 
   header{position:sticky;top:calc(env(safe-area-inset-top,0px) + 4px);z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
   .nav{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding-block:14px}
-  .wordmark{font-family:var(--font-display);font-weight:700;font-size:1.05rem;color:var(--wordmark-color);letter-spacing:-.01em;text-decoration:none}
+  .wordmark{font-family:var(--font-display);font-weight:600;font-size:1.05rem;color:var(--wordmark-color);letter-spacing:.01em;text-decoration:none;display:inline-flex;align-items:center;gap:10px}
+  /* Revealed Seam mark: production SVGs from brand/visual-identity (private docs repo). Header uses Compact (24-48px tier), footer uses Primary (>=48px tier); flat ink on light, flat white on dark. */
+  .mark{display:block;flex-shrink:0}
+  .mark-dark{display:none}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mark-light{display:none} :root:not([data-theme="light"]) .mark-dark{display:block} }
+  :root[data-theme="dark"] .mark-light{display:none}
+  :root[data-theme="dark"] .mark-dark{display:block}
   nav.links{display:flex}
   nav.links ul{display:flex;gap:var(--sp-3);list-style:none;margin:0;padding:0;font-size:.9rem}
   nav.links a{color:var(--text);text-decoration:none;padding-block:4px;border-bottom:1px solid transparent}
@@ -114,10 +126,12 @@
   .nav-toggle a{display:block;padding:8px 10px;border-radius:var(--radius-sm);color:var(--text);text-decoration:none;font-size:.92rem}
   .nav-toggle a:hover{background:var(--surface);color:var(--accent)}
 
-  @media (max-width:640px){
+  @media (max-width:760px){
     nav.links{display:none}
     .nav-toggle{display:block}
   }
+  nav.links a, header .btn, .wordmark{white-space:nowrap}
+  @media (max-width:360px){ .wordmark{font-size:.95rem;gap:8px} .wordmark .mark{width:28px;height:28px} }
 
   /* .btn — one primary action per view. Minimum 44px touch target throughout. */
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-body);font-weight:600;font-size:.92rem;padding:12px 22px;min-height:44px;border-radius:var(--radius-sm);border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .1s ease,opacity .15s ease,border-color .15s ease}
@@ -194,7 +208,7 @@
   textarea{resize:vertical;min-height:100px}
   .privacy-note{font-size:.82rem;color:var(--muted);margin-top:-4px}
   .contact-alt{margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--border);font-size:.9rem}
-  .email-copy{display:inline-flex;align-items:center;gap:var(--sp-1);font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius-sm)}
+  .email-copy{display:inline-flex;align-items:center;gap:var(--sp-1);max-width:100%;flex-wrap:wrap;overflow-wrap:anywhere;font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius-sm)}
   .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:0;min-height:auto}
   #confirm{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-top:var(--sp-2)}
   #confirm strong{display:block;margin-bottom:4px}
@@ -207,6 +221,7 @@
   .sticky-cta.is-hidden{transform:translateY(100%);opacity:0;pointer-events:none}
   @media (max-width:640px){
     .sticky-cta{display:block}
+    .nav-actions > .btn-primary{display:none} /* the sticky bar carries this action on small screens; keeps the header within the viewport now that it holds the mark */
     body{padding-bottom:72px}
   }
 
@@ -219,18 +234,20 @@
   .foot-grid ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
   .foot-grid a{color:var(--muted);text-decoration:none}
   .foot-grid a:hover{color:var(--accent)}
-  .foot-wordmark{font-family:var(--font-display);font-weight:700;color:var(--wordmark-color);font-size:1rem;margin-bottom:6px;display:block}
+  .foot-wordmark{font-family:var(--font-display);font-weight:600;letter-spacing:.01em;color:var(--wordmark-color);font-size:1rem;margin-bottom:6px;display:flex;align-items:center;gap:12px}
   .foot-bottom{margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--border);font-size:.8rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-1)}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
 
 <a class="skip-link" href="#main">Skip to main content</a>
 <div class="scale-bar"><div class="scale-fill" id="scale-fill"></div></div>
 
 <header>
   <div class="wrap nav">
-    <a class="wordmark" href="#home">STRUCTCONSULTPRO</a>
+    <a class="wordmark" href="#home"><img class="mark mark-light" src="assets/BRAND_Compact_Flat_Black.svg" width="32" height="32" alt=""><img class="mark mark-dark" src="assets/BRAND_Compact_Flat_White.svg" width="32" height="32" alt="">STRUCTCONSULTPRO</a>
     <nav class="links" aria-label="Page sections">
       <ul>
         <li><a href="#how">How it works</a></li>
@@ -356,10 +373,10 @@
     <div class="wrap founder" style="padding:0">
       <p class="eyebrow">Founder</p>
       <h2>Vanessa Vieira</h2>
-      <p class="founder-lede" style="font-family:var(--font-display);font-size:clamp(1.1rem,2.6vw,1.4rem);font-weight:600;line-height:1.4;max-width:60ch">Civil engineer building an engineering and construction technology company in the United States.</p>
+      <p class="founder-lede" style="font-family:var(--font-display);font-size:clamp(1.1rem,2.6vw,1.4rem);font-weight:600;line-height:1.4;max-width:60ch">Civil engineering graduate from Brazil, building a construction technology company in the United States.</p>
       <div class="founder-body">
         <p>Vanessa Vieira holds a civil engineering degree from Brazil. Her education has been evaluated through the NCEES (National Council of Examiners for Engineering and Surveying) credential process, and she is pursuing the Fundamentals of Engineering (FE) exam as part of the path to U.S. professional licensure.</p>
-        <p>She founded StructConsultPro to deliver, today, the construction support that does not require a professional engineer's seal, while she continues toward full licensure. Work that requires a seal is handled in partnership with a licensed engineer.</p>
+        <p>She founded StructConsultPro to deliver, today, the construction support that does not require a professional engineer's seal, while she continues toward full licensure.</p>
       </div>
       <div class="grid-2" style="margin-top:var(--sp-4)">
         <div class="card marked">
@@ -419,23 +436,19 @@
             </div>
           </div>
           <div class="field">
-            <label for="drawings">Drawings and specifications</label>
-            <input id="drawings" name="drawings" type="file" multiple>
-            <p class="hint">PDF, image, or CAD export. You can also just email these, see below.</p>
-          </div>
-          <div class="field">
             <label for="notes">Anything else worth knowing</label>
             <textarea id="notes" name="notes" placeholder="Scope, specific areas to focus on, questions"></textarea>
           </div>
         </fieldset>
+        <p class="hint">When you press send, your email app opens with these details filled in. Attach your drawings and specifications there (PDF, image, or CAD export) and send.</p>
         <p class="privacy-note">What you send here is used only to prepare and review your takeoff. It is not shared with third parties or used for anything else.</p>
         <div>
           <button class="btn btn-primary" type="submit">Send project details</button>
         </div>
       </form>
       <div id="confirm" role="status">
-        <strong>Got it.</strong>
-        This form cannot send attachments on its own yet, so please also email your drawings using the address below and mention the details you just entered, so nothing gets lost.
+        <strong>Your email app should now be open.</strong>
+        Attach your drawings and press send there. If nothing opened, email the address below with your drawings and the details you entered.
       </div>
       <div class="contact-alt">
         <p class="muted" style="margin-bottom:var(--sp-1)">Prefer email directly</p>
@@ -456,8 +469,8 @@
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <span class="foot-wordmark">STRUCTCONSULTPRO</span>
-        <p style="margin:0">Construction intelligence, estimating, and project support for small Florida contractors. Miami, FL.</p>
+        <span class="foot-wordmark"><img class="mark mark-light" src="assets/BRAND_Primary_Flat_Black.svg" width="48" height="48" alt=""><img class="mark mark-dark" src="assets/BRAND_Primary_Flat_White.svg" width="48" height="48" alt="">STRUCTCONSULTPRO</span>
+        <p style="margin:0">Construction intelligence. Quantity takeoffs for small Florida contractors. Miami, FL.</p>
       </div>
       <div>
         <h3>Navigate</h3>
@@ -494,6 +507,23 @@
       form.reportValidity();
       return;
     }
+    function val(id){ return document.getElementById(id).value.trim(); }
+    var subject = 'Takeoff request: ' + val('ptype') + (val('location') ? ' (' + val('location') + ')' : '');
+    var body = [
+      'Name: ' + val('name'),
+      'Email: ' + val('email'),
+      'Project type: ' + val('ptype'),
+      'Location: ' + val('location'),
+      'Project stage: ' + val('stage'),
+      'Timeline needed: ' + val('timeline'),
+      '',
+      'Notes:',
+      val('notes'),
+      '',
+      '(Drawings and specifications attached)'
+    ].join('\n');
+    window.location.href = 'mailto:' + document.getElementById('email-text').textContent.trim() +
+      '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     confirm.style.display = 'block';
     confirm.scrollIntoView({behavior:'smooth', block:'center'});
   });
@@ -560,3 +590,5 @@
   updateScale();
 })();
 </script>
+</body>
+</html>
