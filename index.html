@@ -1,0 +1,562 @@
+<title>StructConsultPro | Quantity Takeoffs and Bid Support for Florida Contractors</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="StructConsultPro turns construction drawings and specifications into organized quantity takeoffs and material lists ready for your bid, for small and mid size contractors in Florida.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0F2A44">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="StructConsultPro">
+<meta property="og:title" content="StructConsultPro | Quantity Takeoffs and Bid Support for Florida Contractors">
+<meta property="og:description" content="Send your drawings and specifications. Get back an organized quantity takeoff and a material list ready for your bid.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="StructConsultPro | Quantity Takeoffs and Bid Support">
+<meta name="twitter:description" content="Send your drawings and specifications. Get back an organized quantity takeoff and a material list ready for your bid.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "StructConsultPro Engineering LLC",
+  "description": "Quantity takeoffs and bid support for small and mid size general contractors and remodelers in Florida.",
+  "areaServed": { "@type": "State", "name": "Florida" },
+  "address": { "@type": "PostalAddress", "addressLocality": "Miami", "addressRegion": "FL", "addressCountry": "US" },
+  "email": "eng.vanessavieira@icloud.com",
+  "founder": { "@type": "Person", "name": "Vanessa Vieira", "jobTitle": "Founder" },
+  "knowsLanguage": ["en", "pt"]
+}
+</script>
+
+<style>
+  /*
+    Component inventory (the reusable patterns this page is built from; reuse
+    these, don't invent new ones, when extending the site or future documents):
+      .card       — bordered content block, one idea per card.
+      .marked     — corner tick modifier, drawing title block reference.
+      .schedule   — labelled row list, construction document schedule convention.
+      .faq-item   — disclosure pattern: button (question) + region (answer).
+      .step       — numbered sequence item, only for genuinely ordered content.
+      .statement  — single bold structural claim, one per page section at most.
+      .btn        — primary/ghost action, one primary per view at a time.
+    Layout concept: a drawing sheet reads top to bottom in fixed bands with a
+    title block and a scale note. This page keeps that logic: a fixed content
+    column, a ruler style progress indicator, corner ticks standing in for a
+    title block frame, and a schedule table for the facts a reader has to
+    trust before acting.
+  */
+  :root{
+    --primary:#0F2A44; --primary-ink:#FFFFFF;
+    --secondary:#C1712F; --accent:#226B7A;
+    --bg:#FFFFFF; --surface:#F5F6F8; --border:#E2E5EA;
+    --text:#1A1F26; --muted:#6B7280;
+    --font-display:'Space Grotesk',system-ui,sans-serif;
+    --font-body:'Inter',system-ui,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sp-1:8px; --sp-2:16px; --sp-3:24px; --sp-4:32px; --sp-5:48px; --sp-6:64px; --sp-7:96px;
+    --radius-sm:6px; --radius-md:10px;
+    --wordmark-color:var(--primary);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F1417; --surface:#171D22; --border:#262E35;
+      --text:#EDEFF2; --muted:#9AA3AD; --primary-ink:#0F1417;
+      --wordmark-color:var(--text);
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F1417; --surface:#171D22; --border:#262E35;
+    --text:#EDEFF2; --muted:#9AA3AD; --primary-ink:#0F1417;
+    --wordmark-color:var(--text);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation-duration:.01ms!important;transition-duration:.01ms!important} }
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;margin:0;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:720px;margin:0 auto;padding-inline:var(--sp-2)}
+  section{padding-block:var(--sp-6);scroll-margin-top:76px;position:relative}
+  .surface{background:var(--surface)}
+  h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0 0 var(--sp-2);color:var(--text)}
+  h1{font-size:clamp(1.9rem,5vw,2.8rem);font-weight:700;line-height:1.12;letter-spacing:-.01em}
+  h2{font-size:clamp(1.3rem,3.4vw,1.7rem);font-weight:600;letter-spacing:-.005em}
+  h3{font-size:1.05rem;font-weight:600}
+  p{margin:0 0 var(--sp-2);max-width:65ch}
+  .muted{color:var(--muted)}
+  .eyebrow{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--secondary);margin:0 0 var(--sp-1)}
+  a{color:var(--accent)}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .skip-link{position:absolute;left:-9999px;top:auto;background:var(--primary);color:var(--primary-ink);padding:10px 16px;border-radius:var(--radius-sm);z-index:100}
+  .skip-link:focus{left:var(--sp-2);top:var(--sp-1)}
+
+  /* Scale bar: a slim ruler across the very top, fill length is scroll progress. */
+  .scale-bar{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;height:4px;background:var(--border);z-index:20;background-image:repeating-linear-gradient(90deg,var(--border) 0 1px,transparent 1px 24px)}
+  .scale-fill{height:100%;width:0%;background:var(--secondary);transition:width .08s linear}
+
+  /* .marked — corner ticks, a quiet title block frame. */
+  .marked{position:relative}
+  .marked::before,.marked::after{content:"";position:absolute;width:10px;height:10px;pointer-events:none}
+  .marked::before{top:-1px;left:-1px;border-top:2px solid var(--secondary);border-left:2px solid var(--secondary)}
+  .marked::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--secondary);border-right:2px solid var(--secondary)}
+
+  header{position:sticky;top:calc(env(safe-area-inset-top,0px) + 4px);z-index:10;background:var(--bg);border-bottom:1px solid var(--border)}
+  .nav{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);padding-block:14px}
+  .wordmark{font-family:var(--font-display);font-weight:700;font-size:1.05rem;color:var(--wordmark-color);letter-spacing:-.01em;text-decoration:none}
+  nav.links{display:flex}
+  nav.links ul{display:flex;gap:var(--sp-3);list-style:none;margin:0;padding:0;font-size:.9rem}
+  nav.links a{color:var(--text);text-decoration:none;padding-block:4px;border-bottom:1px solid transparent}
+  nav.links a:hover{color:var(--accent);border-color:var(--accent)}
+  .nav-actions{display:flex;align-items:center;gap:var(--sp-2)}
+
+  .nav-toggle{display:none;position:relative}
+  .nav-toggle summary{list-style:none;cursor:pointer;font-family:var(--font-body);font-weight:600;font-size:.9rem;border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 14px;min-height:40px;display:flex;align-items:center}
+  .nav-toggle summary::-webkit-details-marker{display:none}
+  .nav-toggle[open] summary{border-color:var(--accent);color:var(--accent)}
+  .nav-toggle ul{list-style:none;margin:8px 0 0;padding:10px;position:absolute;right:0;top:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);min-width:190px;display:flex;flex-direction:column;gap:4px}
+  .nav-toggle a{display:block;padding:8px 10px;border-radius:var(--radius-sm);color:var(--text);text-decoration:none;font-size:.92rem}
+  .nav-toggle a:hover{background:var(--surface);color:var(--accent)}
+
+  @media (max-width:640px){
+    nav.links{display:none}
+    .nav-toggle{display:block}
+  }
+
+  /* .btn — one primary action per view. Minimum 44px touch target throughout. */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-body);font-weight:600;font-size:.92rem;padding:12px 22px;min-height:44px;border-radius:var(--radius-sm);border:1px solid transparent;cursor:pointer;text-decoration:none;transition:transform .1s ease,opacity .15s ease,border-color .15s ease}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:var(--primary);color:var(--primary-ink)}
+  .btn-primary:hover{opacity:.88}
+  .btn-ghost{background:transparent;border-color:var(--border);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  .hero{padding-block:var(--sp-7) var(--sp-5)}
+  .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:32px 32px;opacity:.35;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+  .hero > *{position:relative}
+  .hero .lead{font-size:1.15rem;max-width:56ch}
+  .hero-actions{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-top:var(--sp-3)}
+  .geo-tag{position:absolute;top:var(--sp-2);right:var(--sp-2);font-family:var(--font-mono);font-size:.7rem;color:var(--muted);text-align:right;line-height:1.5;display:none}
+  @media (min-width:640px){ .geo-tag{display:block} }
+  .scope-note{margin-top:var(--sp-4);padding:var(--sp-2) var(--sp-3);border:1px solid var(--border);border-radius:var(--radius-md);font-size:.88rem;color:var(--muted);background:var(--surface)}
+  .scope-note strong{color:var(--text)}
+
+  .tags{display:flex;flex-wrap:wrap;gap:var(--sp-1)}
+  .tag{display:inline-block;font-family:var(--font-mono);font-size:.76rem;padding:4px 10px;border-radius:100px;border:1px solid var(--border);color:var(--muted)}
+
+  /* .step — a genuine five step sequence; numbering is informational here, not decorative. */
+  .steps{list-style:none;margin:var(--sp-3) 0 0;padding:0;position:relative}
+  .step{display:grid;grid-template-columns:44px 1fr;gap:var(--sp-2);padding-block:var(--sp-2);position:relative}
+  .step:not(:last-child)::after{content:"";position:absolute;left:21px;top:44px;bottom:-8px;width:1px;background:var(--border)}
+  .step-mark{width:44px;height:44px;border-radius:100px;border:1.5px solid var(--secondary);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;font-family:var(--font-mono);color:var(--text);flex-shrink:0}
+  .step-mark span{font-size:.9rem;font-weight:600;line-height:1}
+  .step-mark small{font-size:.5rem;letter-spacing:.06em;color:var(--muted);line-height:1}
+  .step-mark::before{content:"";position:absolute;left:6px;right:6px;top:50%;height:1px;background:var(--secondary);opacity:.5}
+  .step h3{margin-bottom:.2em}
+  .step p{margin:0;font-size:.94rem}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)}
+  @media (max-width:560px){.grid-2{grid-template-columns:1fr}}
+  .card{border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--sp-3);background:var(--bg)}
+
+  /* .statement — one bold structural claim per section, at most. Left rule reuses
+     the same accent convention as .callout/.marked rather than adding a new device. */
+  .statement{font-family:var(--font-display);font-weight:700;font-size:clamp(1.25rem,3.2vw,1.8rem);line-height:1.3;color:var(--text);max-width:36ch;margin:0 0 var(--sp-3);border-left:3px solid var(--secondary);padding-left:var(--sp-3)}
+
+  /* .schedule — labelled row list, borrowed from a construction drawing schedule
+     (door schedule, window schedule): the honest facts a reader checks before trusting. */
+  .schedule{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:0}
+  .schedule-row{display:grid;grid-template-columns:130px 1fr;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--border)}
+  .schedule-row:last-child{border-bottom:none}
+  .schedule-row:nth-child(even){background:var(--surface)}
+  .schedule-row dt{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.05em;text-transform:uppercase;color:var(--secondary);margin:0;padding-top:2px}
+  .schedule-row dd{margin:0;font-size:.94rem}
+  @media (max-width:560px){.schedule-row{grid-template-columns:1fr;gap:4px}}
+
+  /* .faq-item — disclosure pattern. Height animates via grid-template-rows so no
+     JS measurement is needed; the chevron rotation is the only motion, and only
+     in response to the click that opens it. */
+  .faq-list{border-top:1px solid var(--border)}
+  .faq-item{border-bottom:1px solid var(--border)}
+  .faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);text-align:left;background:none;border:none;cursor:pointer;padding:var(--sp-2) 0;font-family:var(--font-body);font-size:1rem;font-weight:600;color:var(--text)}
+  .chevron{flex-shrink:0;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s ease}
+  .faq-q[aria-expanded="true"] .chevron{transform:rotate(225deg)}
+  .faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s ease}
+  .faq-a .a-inner{overflow:hidden}
+  .faq-a p{padding-top:0;padding-bottom:var(--sp-2);font-size:.94rem;color:var(--muted);max-width:60ch}
+  .faq-item.open .faq-a{grid-template-rows:1fr}
+
+  form{display:flex;flex-direction:column;gap:var(--sp-2);margin-top:var(--sp-3)}
+  fieldset{border:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--sp-2)}
+  legend{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:0 0 4px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  label{font-size:.88rem;font-weight:600}
+  .hint{font-size:.8rem;color:var(--muted);margin-top:-2px}
+  .row-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)}
+  @media (max-width:560px){.row-2{grid-template-columns:1fr}}
+  input,select,textarea{font-family:var(--font-body);font-size:1rem;padding:12px 14px;min-height:44px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);width:100%}
+  textarea{resize:vertical;min-height:100px}
+  .privacy-note{font-size:.82rem;color:var(--muted);margin-top:-4px}
+  .contact-alt{margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--border);font-size:.9rem}
+  .email-copy{display:inline-flex;align-items:center;gap:var(--sp-1);font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius-sm)}
+  .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:0;min-height:auto}
+  #confirm{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-top:var(--sp-2)}
+  #confirm strong{display:block;margin-bottom:4px}
+
+  /* Sticky mobile action bar: keeps the one primary action reachable without
+     re-scrolling, and hides itself once the real submit button is on screen
+     so the two never compete. */
+  .sticky-cta{display:none;position:fixed;left:0;right:0;bottom:0;z-index:15;padding:10px var(--sp-2) calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--border);transition:transform .2s ease,opacity .2s ease}
+  .sticky-cta .btn{width:100%}
+  .sticky-cta.is-hidden{transform:translateY(100%);opacity:0;pointer-events:none}
+  @media (max-width:640px){
+    .sticky-cta{display:block}
+    body{padding-bottom:72px}
+  }
+
+  /* Structural footer: company, navigation, and contact as three distinct
+     blocks, closing with a compliance line rather than one thin row. */
+  footer{border-top:1px solid var(--border);padding-block:var(--sp-5) var(--sp-4);font-size:.9rem;color:var(--muted)}
+  .foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:var(--sp-4)}
+  @media (max-width:640px){ .foot-grid{grid-template-columns:1fr;gap:var(--sp-3)} }
+  .foot-grid h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;font-family:var(--font-mono);color:var(--muted);font-weight:500;margin-bottom:var(--sp-1)}
+  .foot-grid ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  .foot-grid a{color:var(--muted);text-decoration:none}
+  .foot-grid a:hover{color:var(--accent)}
+  .foot-wordmark{font-family:var(--font-display);font-weight:700;color:var(--wordmark-color);font-size:1rem;margin-bottom:6px;display:block}
+  .foot-bottom{margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--border);font-size:.8rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:var(--sp-1)}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<a class="skip-link" href="#main">Skip to main content</a>
+<div class="scale-bar"><div class="scale-fill" id="scale-fill"></div></div>
+
+<header>
+  <div class="wrap nav">
+    <a class="wordmark" href="#home">STRUCTCONSULTPRO</a>
+    <nav class="links" aria-label="Page sections">
+      <ul>
+        <li><a href="#how">How it works</a></li>
+        <li><a href="#trust">Trust</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#about">Founder</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <details class="nav-toggle">
+        <summary aria-label="Open page menu">Menu</summary>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#trust">Trust</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#about">Founder</a></li>
+          <li><a href="#submit">Submit a project</a></li>
+        </ul>
+      </details>
+      <a class="btn btn-primary" href="#submit">Submit a project</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+  <section class="hero" id="home">
+    <span class="geo-tag" aria-hidden="true">25.7617&deg; N, 80.1918&deg; W<br>MIAMI, FL</span>
+    <p class="eyebrow">Construction Intelligence</p>
+    <h1>Quantity takeoffs and bid support for small contractors</h1>
+    <p class="lead">Send your drawings and specifications. Get back an organized, structured quantity takeoff, so you can put a real number on a bid instead of guessing at one.</p>
+    <p>Most small contractors and remodelers lose hours on takeoffs before they even know if a job is worth bidding on. StructConsultPro reads the plans, organizes the quantities by item and area, and hands you a clean deliverable you can drop straight into your estimate.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#submit">Submit your project</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+    <div class="scope-note marked">
+      <strong>Scope:</strong> reading and quantifying what is drawn, item counts, measurements, and organized lists. Not engineering judgment, not structural calculation, not code compliance review, and not a substitute for a licensed engineer's seal where one is required.
+    </div>
+  </section>
+
+  <section class="surface" id="who">
+    <div class="wrap" style="padding:0">
+      <h2>Who this is for</h2>
+      <p>Small and mid size general contractors, remodelers, and builders in Florida who need a takeoff organized quickly and would rather not tie up estimating staff on payroll for every bid.</p>
+      <div class="tags">
+        <span class="tag">General contractors</span>
+        <span class="tag">Remodelers</span>
+        <span class="tag">Small builders</span>
+        <span class="tag">Florida based projects</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <h2>How it works</h2>
+    <p class="muted">Five steps, the same process every time, documented internally as SOP 03.</p>
+    <ol class="steps">
+      <li class="step"><span class="step-mark" aria-hidden="true"><span>01</span><small>SCP</small></span><div><h3>Upload drawings and specifications</h3><p>Send the plan set and specs for the scope you need quantified.</p></div></li>
+      <li class="step"><span class="step-mark" aria-hidden="true"><span>02</span><small>SCP</small></span><div><h3>Review and organization</h3><p>Drawings are reviewed, the scope is confirmed, and the file set is organized before anything is extracted.</p></div></li>
+      <li class="step"><span class="step-mark" aria-hidden="true"><span>03</span><small>SCP</small></span><div><h3>Quantity takeoff</h3><p>Quantities are extracted and classified by item and area.</p></div></li>
+      <li class="step"><span class="step-mark" aria-hidden="true"><span>04</span><small>SCP</small></span><div><h3>Quality check</h3><p>Every takeoff is checked before it moves to review, so nothing goes out unchecked.</p></div></li>
+      <li class="step"><span class="step-mark" aria-hidden="true"><span>05</span><small>SCP</small></span><div><h3>Delivery</h3><p>You receive a structured takeoff document, PDF or Excel, ready to use in your estimate.</p></div></li>
+    </ol>
+  </section>
+
+  <section class="surface" id="trust">
+    <div class="wrap" style="padding:0">
+      <h2>Trust and process</h2>
+      <p class="statement">One documented process. One human review. No invented case studies.</p>
+      <p>StructConsultPro is a new practice. There is no case study to show yet and no claim of a track record, and this page says that plainly instead of pretending otherwise. What you can check instead is the process itself, laid out below exactly as it runs.</p>
+      <dl class="schedule marked">
+        <div class="schedule-row"><dt>Review</dt><dd>Every takeoff is checked internally before it is delivered, following the five step process above.</dd></div>
+        <div class="schedule-row"><dt>Scope</dt><dd>Reading and quantifying what is drawn. Not engineering judgment, not a structural calculation, not a substitute for a licensed engineer's seal where one is required.</dd></div>
+        <div class="schedule-row"><dt>Your data</dt><dd>Drawings and details you send are used only to prepare and review your takeoff. They are not shared with third parties or used for anything else.</dd></div>
+        <div class="schedule-row"><dt>Commitment</dt><dd>Nothing starts until scope and cost are confirmed together. No pricing is published here, and none is owed by filling out a form.</dd></div>
+        <div class="schedule-row"><dt>Turnaround</dt><dd>Confirmed once your drawings are reviewed, not promised up front, since it depends on the size and condition of the plan set.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap" style="padding:0">
+      <h2>Questions worth answering upfront</h2>
+      <p class="muted">The honest answer to each, including where the honest answer is "not yet."</p>
+      <div class="faq-list">
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1"><span>Can you work with my plans?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-1" role="region" aria-labelledby="faq-q-1"><div class="a-inner"><p>Send them and find out directly. PDF, image, or CAD exports all work, for residential and commercial scopes within the sizes described in Who this is for above.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2"><span>How accurate is the takeoff?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-2" role="region" aria-labelledby="faq-q-2"><div class="a-inner"><p>Every takeoff goes through the quality check step before it reaches you, and is reviewed by a person before delivery. There is no published accuracy statistic yet, since this is a new practice. The process above is what accuracy currently rests on, not a track record.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3"><span>How fast can you turn it around?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-3" role="region" aria-labelledby="faq-q-3"><div class="a-inner"><p>It depends on the size and condition of your plan set, so turnaround is confirmed once your drawings are reviewed rather than promised before that.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4"><span>What exactly do I receive?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-4" role="region" aria-labelledby="faq-q-4"><div class="a-inner"><p>A structured quantity takeoff document, delivered as PDF or Excel, organized by item and area and ready to drop into your estimate.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5"><span>Why not just use estimating software?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-5" role="region" aria-labelledby="faq-q-5"><div class="a-inner"><p>Software still needs someone to read the plans, enter the data, and catch what doesn't fit a template. That reading and organizing is what gets done for you here, delivered as a document you can use immediately, not a license you have to learn.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-6" id="faq-q-6"><span>Why not just hire an estimator?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-6" role="region" aria-labelledby="faq-q-6"><div class="a-inner"><p>An estimator on staff or on retainer costs more than a single bid needs. This is built for the project in front of you right now, without that commitment.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-7" id="faq-q-7"><span>Who reviews the work before I see it?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-7" role="region" aria-labelledby="faq-q-7"><div class="a-inner"><p>Vanessa Vieira, the founder, reviews every takeoff personally before it is delivered. There is no team standing between your project and that review.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-8" id="faq-q-8"><span>What if something in the plans is unclear?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-8" role="region" aria-labelledby="faq-q-8"><div class="a-inner"><p>You are contacted directly before anything is finalized. An unclear drawing does not get guessed at.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="surface" id="about">
+    <div class="wrap founder" style="padding:0">
+      <p class="eyebrow">Founder</p>
+      <h2>Vanessa Vieira</h2>
+      <p class="founder-lede" style="font-family:var(--font-display);font-size:clamp(1.1rem,2.6vw,1.4rem);font-weight:600;line-height:1.4;max-width:60ch">Civil engineer building an engineering and construction technology company in the United States.</p>
+      <div class="founder-body">
+        <p>Vanessa Vieira holds a civil engineering degree from Brazil. Her education has been evaluated through the NCEES (National Council of Examiners for Engineering and Surveying) credential process, and she is pursuing the Fundamentals of Engineering (FE) exam as part of the path to U.S. professional licensure.</p>
+        <p>She founded StructConsultPro to deliver, today, the construction support that does not require a professional engineer's seal, while she continues toward full licensure. Work that requires a seal is handled in partnership with a licensed engineer.</p>
+      </div>
+      <div class="grid-2" style="margin-top:var(--sp-4)">
+        <div class="card marked">
+          <h3>Background</h3>
+          <p>Civil engineering graduate from Brazil, currently pursuing U.S. engineering licensure. Credentials evaluated through NCEES; the FE exam is part of that pathway.</p>
+        </div>
+        <div class="card marked">
+          <h3>How the company works</h3>
+          <p>Technology first: a documented procedure for every takeoff, structured data, and AI used as a tool inside a human reviewed process, never as a replacement for it. Today that means one service, one documented process, and no claim to a longer track record than the company has.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="surface" id="submit">
+    <div class="wrap" style="padding:0">
+      <h2>Submit your project</h2>
+      <p>Tell us about the project and attach your drawings. Scope, timeline, and cost get confirmed before anything starts, so there is nothing to commit to yet by filling this in.</p>
+      <form id="project-form" novalidate>
+        <fieldset>
+          <legend>Your contact details</legend>
+          <div class="row-2">
+            <div class="field"><label for="name">Name <span aria-hidden="true">*</span></label><input id="name" name="name" autocomplete="name" required></div>
+            <div class="field"><label for="email">Email <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" autocomplete="email" required></div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>About the project</legend>
+          <div class="row-2">
+            <div class="field">
+              <label for="ptype">Project type</label>
+              <select id="ptype" name="ptype">
+                <option>Residential remodel</option>
+                <option>Residential new construction</option>
+                <option>Commercial tenant improvement</option>
+                <option>Commercial new construction</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="location">Location</label>
+              <input id="location" name="location" placeholder="City and county, for example Miami Dade, FL">
+            </div>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="stage">Project stage</label>
+              <select id="stage" name="stage">
+                <option>Bidding now</option>
+                <option>Preparing to bid</option>
+                <option>Just exploring cost</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="timeline">Timeline needed</label>
+              <input id="timeline" name="timeline" placeholder="For example, within one week">
+            </div>
+          </div>
+          <div class="field">
+            <label for="drawings">Drawings and specifications</label>
+            <input id="drawings" name="drawings" type="file" multiple>
+            <p class="hint">PDF, image, or CAD export. You can also just email these, see below.</p>
+          </div>
+          <div class="field">
+            <label for="notes">Anything else worth knowing</label>
+            <textarea id="notes" name="notes" placeholder="Scope, specific areas to focus on, questions"></textarea>
+          </div>
+        </fieldset>
+        <p class="privacy-note">What you send here is used only to prepare and review your takeoff. It is not shared with third parties or used for anything else.</p>
+        <div>
+          <button class="btn btn-primary" type="submit">Send project details</button>
+        </div>
+      </form>
+      <div id="confirm" role="status">
+        <strong>Got it.</strong>
+        This form cannot send attachments on its own yet, so please also email your drawings using the address below and mention the details you just entered, so nothing gets lost.
+      </div>
+      <div class="contact-alt">
+        <p class="muted" style="margin-bottom:var(--sp-1)">Prefer email directly</p>
+        <span class="email-copy" id="email-copy">
+          <span id="email-text">eng.vanessavieira@icloud.com</span>
+          <button type="button" id="copy-btn" aria-label="Copy email address">Copy</button>
+        </span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="sticky-cta" id="sticky-cta">
+  <a class="btn btn-primary" href="#submit">Submit a project</a>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <span class="foot-wordmark">STRUCTCONSULTPRO</span>
+        <p style="margin:0">Construction intelligence, estimating, and project support for small Florida contractors. Miami, FL.</p>
+      </div>
+      <div>
+        <h3>Navigate</h3>
+        <ul>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#trust">Trust and process</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#about">Founder</a></li>
+          <li><a href="#submit">Submit a project</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Contact</h3>
+        <ul>
+          <li><a href="mailto:eng.vanessavieira@icloud.com">eng.vanessavieira@icloud.com</a></li>
+          <li>Every submission is read personally by the founder.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>&copy; 2026 StructConsultPro Engineering LLC</span>
+      <span>Quantity takeoff and documentation services only. Not a substitute for a licensed engineer's seal where one is required.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var form = document.getElementById('project-form');
+  var confirm = document.getElementById('confirm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!form.checkValidity()){
+      form.reportValidity();
+      return;
+    }
+    confirm.style.display = 'block';
+    confirm.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+
+  var copyBtn = document.getElementById('copy-btn');
+  var emailText = document.getElementById('email-text').textContent;
+  copyBtn.addEventListener('click', function(){
+    function fallback(){
+      var r = document.createRange();
+      r.selectNode(document.getElementById('email-text'));
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(r);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(emailText).then(function(){
+        copyBtn.textContent = 'Copied';
+        setTimeout(function(){ copyBtn.textContent = 'Copy'; }, 1500);
+      }).catch(fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  var navToggle = document.querySelector('.nav-toggle');
+  if (navToggle){
+    navToggle.querySelectorAll('a').forEach(function(link){
+      link.addEventListener('click', function(){ navToggle.removeAttribute('open'); });
+    });
+    document.addEventListener('click', function(e){
+      if (navToggle.hasAttribute('open') && !navToggle.contains(e.target)){
+        navToggle.removeAttribute('open');
+      }
+    });
+  }
+
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.closest('.faq-item').classList.toggle('open', !expanded);
+    });
+  });
+
+  var stickyCta = document.getElementById('sticky-cta');
+  var submitBtn = form.querySelector('button[type="submit"]');
+  if (stickyCta && submitBtn && 'IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        stickyCta.classList.toggle('is-hidden', entry.isIntersecting);
+      });
+    }, {threshold:0.15});
+    io.observe(submitBtn);
+  }
+
+  var fill = document.getElementById('scale-fill');
+  function updateScale(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var height = h.scrollHeight - h.clientHeight;
+    var pct = height > 0 ? (scrolled / height) * 100 : 0;
+    fill.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateScale, {passive:true});
+  updateScale();
+})();
+</script>
