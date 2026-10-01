@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Request received | StructConsultPro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#1A1F26">
+<link rel="icon" type="image/svg+xml" href="assets/BRAND_Favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* Same tokens as index.html (locked Revealed Seam colors + Inter / IBM Plex Mono). */
+  :root{
+    --primary:#1A1F26; --primary-ink:#FFFFFF; --secondary:#4A5D6B; --accent:#4A5D6B;
+    --bg:#FFFFFF; --surface:#F5F6F8; --border:#E2E5EA; --text:#1A1F26; --muted:#6B7280;
+    --font-body:'Inter',system-ui,sans-serif; --font-mono:'IBM Plex Mono',ui-monospace,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0F1417; --surface:#171D22; --border:#262E35; --text:#EDEFF2; --muted:#9AA3AD;
+      --primary:#FFFFFF; --primary-ink:#1A1F26; --secondary:#7C93A3; --accent:#7C93A3;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0F1417; --surface:#171D22; --border:#262E35; --text:#EDEFF2; --muted:#9AA3AD;
+    --primary:#FFFFFF; --primary-ink:#1A1F26; --secondary:#7C93A3; --accent:#7C93A3;
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding-inline:16px}
+  header{border-bottom:1px solid var(--border)}
+  .wordmark{display:inline-flex;align-items:center;gap:10px;padding-block:14px;font-weight:600;font-size:1.05rem;letter-spacing:.01em;color:var(--text);text-decoration:none;white-space:nowrap}
+  .mark{display:block}
+  .mark-dark{display:none}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .mark-light{display:none} :root:not([data-theme="light"]) .mark-dark{display:block} }
+  :root[data-theme="dark"] .mark-light{display:none}
+  :root[data-theme="dark"] .mark-dark{display:block}
+  main{padding-block:64px}
+  .eyebrow{font-family:var(--font-mono);font-weight:500;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--secondary);margin:0 0 8px}
+  h1{font-size:clamp(1.7rem,5vw,2.4rem);font-weight:700;line-height:1.15;margin:0 0 16px}
+  p{max-width:60ch;margin:0 0 16px}
+  .muted{color:var(--muted)}
+  a{color:var(--accent)}
+  a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:12px 22px;border-radius:6px;background:var(--primary);color:var(--primary-ink);font-weight:600;font-size:.92rem;text-decoration:none;margin-top:8px}
+  @media (max-width:360px){ .wordmark{font-size:.95rem;gap:8px} .wordmark .mark{width:28px;height:28px} }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="wordmark" href="index.html"><img class="mark mark-light" src="assets/BRAND_Compact_Flat_Black.svg" width="32" height="32" alt=""><img class="mark mark-dark" src="assets/BRAND_Compact_Flat_White.svg" width="32" height="32" alt="">STRUCTCONSULTPRO</a>
+  </div>
+</header>
+<main class="wrap">
+  <p class="eyebrow">Request received</p>
+  <h1>Your takeoff request was sent.</h1>
+  <p>Vanessa Vieira reads every submission personally and will reply by email from <a href="mailto:eng.vanessavieira@icloud.com">eng.vanessavieira@icloud.com</a>.</p>
+  <p>Scope, timeline, and cost get confirmed together before anything starts, so there is nothing to commit to yet. If something in the plans is unclear, you are contacted directly before anything is finalized.</p>
+  <p class="muted">Forgot a file? Reply to that email or send it to the address above.</p>
+  <a class="btn" href="index.html">Back to StructConsultPro</a>
+</main>
+</body>
+</html>

@@ -212,6 +212,9 @@
   .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:0;min-height:auto}
   #confirm{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-top:var(--sp-2)}
   #confirm strong{display:block;margin-bottom:4px}
+  #form-error{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--secondary);margin-top:var(--sp-2)}
+  input[type="file"]{padding:10px 12px;cursor:pointer}
+  .btn[disabled]{opacity:.6;cursor:progress}
 
   /* Sticky mobile action bar: keeps the one primary action reachable without
      re-scrolling, and hides itself once the real submit button is on screen
@@ -395,7 +398,11 @@
     <div class="wrap" style="padding:0">
       <h2>Request a quantity takeoff</h2>
       <p>Tell us about the project and attach your drawings. Scope, timeline, and cost get confirmed before anything starts, so there is nothing to commit to yet by filling this in.</p>
-      <form id="project-form" novalidate>
+      <!-- Intake: set action to the Formspree endpoint (https://formspree.io/f/<form id>) to enable uploads.
+           With no action, the form falls back to opening a prefilled email. -->
+      <form id="project-form" method="POST" enctype="multipart/form-data" novalidate>
+        <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <fieldset>
           <legend>Your contact details</legend>
           <div class="row-2">
@@ -439,13 +446,19 @@
             <label for="notes">Anything else worth knowing</label>
             <textarea id="notes" name="notes" placeholder="Scope, specific areas to focus on, questions"></textarea>
           </div>
+          <div class="field upload-only">
+            <label for="plans">Project plans and drawings <span aria-hidden="true">*</span></label>
+            <input id="plans" name="plans" type="file" multiple accept=".pdf,.dwg,.zip,.rar,.jpg,.jpeg,.png" required>
+            <p class="hint">PDF, DWG, ZIP or image files. Up to 10 files, 25 MB each, 100 MB in total. Larger plan sets: email them to the address below.</p>
+          </div>
         </fieldset>
-        <p class="hint">When you press send, your email app opens with these details filled in. Attach your drawings and specifications there (PDF, image, or CAD export) and send.</p>
+        <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings and specifications there (PDF, image, or CAD export) and send.</p>
         <p class="privacy-note">What you send here is used only to prepare and review your takeoff.</p>
         <div>
           <button class="btn btn-primary" type="submit">Send takeoff request</button>
         </div>
       </form>
+      <div id="form-error" role="alert"></div>
       <div id="confirm" role="status">
         <strong>Your email app should now be open.</strong>
         Attach your drawings and press send there. If nothing opened, email the address below with your drawings and the details you entered.
@@ -501,10 +514,51 @@
 (function(){
   var form = document.getElementById('project-form');
   var confirm = document.getElementById('confirm');
+  var formError = document.getElementById('form-error');
+  var endpoint = form.getAttribute('action') || '';
+  var uploadMode = endpoint !== '';
+  // Remove the parts of the form that do not apply to the active intake mode.
+  form.querySelectorAll(uploadMode ? '.mailto-only' : '.upload-only').forEach(function(el){ el.remove(); });
+
+  var MAX_FILES = 10, MAX_FILE = 25 * 1024 * 1024, MAX_TOTAL = 100 * 1024 * 1024;
+  function showError(msg){
+    formError.textContent = msg;
+    formError.style.display = 'block';
+    formError.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
+    formError.style.display = 'none';
     if (!form.checkValidity()){
       form.reportValidity();
+      return;
+    }
+    if (uploadMode){
+      var files = Array.prototype.slice.call(document.getElementById('plans').files);
+      var total = files.reduce(function(sum, f){ return sum + f.size; }, 0);
+      var emailAddr = document.getElementById('email-text').textContent.trim();
+      if (files.length > MAX_FILES || files.some(function(f){ return f.size > MAX_FILE; }) || total > MAX_TOTAL){
+        showError('These files are over the upload limit (10 files, 25 MB each, 100 MB in total). Please email the plan set to ' + emailAddr + ' instead.');
+        return;
+      }
+      var button = form.querySelector('button[type="submit"]');
+      var label = button.textContent;
+      button.disabled = true;
+      button.textContent = 'Sending…';
+      fetch(endpoint, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+        .then(function(response){
+          if (response.ok){ window.location.href = 'thank-you.html'; return; }
+          return response.json().catch(function(){ return {}; }).then(function(data){
+            var detail = data && data.errors ? data.errors.map(function(err){ return err.message; }).join(' ') : '';
+            throw new Error(detail || ('status ' + response.status));
+          });
+        })
+        .catch(function(err){
+          button.disabled = false;
+          button.textContent = label;
+          showError('Your request could not be sent (' + err.message + '). Please try again, or email your plans and details to ' + emailAddr + '.');
+        });
       return;
     }
     function val(id){ return document.getElementById(id).value.trim(); }
