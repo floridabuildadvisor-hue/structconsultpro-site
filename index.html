@@ -260,6 +260,9 @@
   .plan-frag figcaption{margin-top:10px;color:var(--muted)}
   .plan-mark circle{fill:#4A5D6B;stroke:#FFFFFF;stroke-width:2}
   .plan-mark text{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500;fill:#FFFFFF;text-anchor:middle}
+  /* Smallest phones: drawing text would render under 12px, so marks and labels scale up; the hero's room labels drop (its rows carry the information). */
+  @media (max-width:359px){ .plan-frag .plan-text,.plan-mark text{font-size:18px} .plan-mark circle{r:19px} }
+  @media (max-width:399px){ .opening .plan-text{display:none} }
   .wb-table .key{width:1%;white-space:nowrap;color:var(--muted)}
   .ref-tag{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:50%;background:var(--secondary);color:var(--bg);font-family:var(--font-mono);font-weight:500;font-size:.75rem}
   /* Questions log: unclear items listed as questions, not guessed. */
@@ -560,7 +563,7 @@
             <text class="plan-text" x="218" y="150">GARAGE</text>
             <g class="plan-mark"><circle cx="300" cy="120" r="15"/><text x="300" y="125">1</text></g>
             <g class="plan-mark"><circle cx="200" cy="78" r="15"/><text x="200" y="83">2</text></g>
-            <g class="plan-mark"><circle cx="168" cy="170" r="15"/><text x="168" y="175">3</text></g>
+            <g class="plan-mark"><circle cx="162" cy="131" r="15"/><text x="162" y="136">3</text></g>
           </svg>
         </div>
         <figcaption class="label">Illustrative sample · fictional plan set and quantities</figcaption>
