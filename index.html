@@ -52,7 +52,7 @@
     --primary:#1A1F26; --primary-ink:#FFFFFF;
     --secondary:#4A5D6B; --accent:#4A5D6B;
     --bg:#FFFFFF; --surface:#F5F6F8; --border:#E2E5EA;
-    --text:#1A1F26; --muted:#6B7280;
+    --text:#1A1F26; --muted:#69707E; /* 4.6:1 on --surface (AA) */
     --font-display:'Inter',system-ui,sans-serif;
     --font-body:'Inter',system-ui,sans-serif;
     --font-mono:'IBM Plex Mono',ui-monospace,monospace;
@@ -75,7 +75,7 @@
     color-scheme:dark;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scroll-padding-top:80px} /* keeps focused fields clear of the sticky header */
   @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation-duration:.01ms!important;transition-duration:.01ms!important} }
   body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6;margin:0;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   .wrap{max-width:720px;margin:0 auto;padding-inline:var(--sp-2)}
@@ -192,7 +192,8 @@
   .chevron{flex-shrink:0;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s ease}
   .faq-q[aria-expanded="true"] .chevron{transform:rotate(225deg)}
   .faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s ease}
-  .faq-a .a-inner{overflow:hidden}
+  .faq-a .a-inner{overflow:hidden;visibility:hidden;transition:visibility .22s}
+  .faq-item.open .faq-a .a-inner{visibility:visible} /* collapsed answers stay out of the tab order */
   .faq-a p{padding-top:0;padding-bottom:var(--sp-2);font-size:.94rem;color:var(--muted);max-width:60ch}
   .faq-item.open .faq-a{grid-template-rows:1fr}
 
@@ -204,12 +205,12 @@
   .hint{font-size:.8rem;color:var(--muted);margin-top:-2px}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)}
   @media (max-width:560px){.row-2{grid-template-columns:1fr}}
-  input,select,textarea{font-family:var(--font-body);font-size:1rem;padding:12px 14px;min-height:44px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);width:100%}
+  input,select,textarea{font-family:var(--font-body);font-size:1rem;padding:12px 14px;min-height:44px;border:1px solid var(--muted);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);width:100%} /* field edges need 3:1 (WCAG 1.4.11); --border is too faint */
   textarea{resize:vertical;min-height:100px}
   .privacy-note{font-size:.82rem;color:var(--muted);margin-top:-4px}
   .contact-alt{margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--border);font-size:.9rem}
   .email-copy{display:inline-flex;align-items:center;gap:var(--sp-1);max-width:100%;flex-wrap:wrap;overflow-wrap:anywhere;font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius-sm)}
-  .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:0;min-height:auto}
+  .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:4px 6px;margin:-4px -6px;min-height:auto} /* 24px target, same visual footprint */
   #confirm{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-top:var(--sp-2)}
   #confirm strong{display:block;margin-bottom:4px}
   #confirm .next-step{display:block;margin-top:var(--sp-1);color:var(--muted);font-size:.92rem}
@@ -236,6 +237,7 @@
     .sticky-cta{display:block}
     .nav-actions > .btn-primary{display:none} /* the sticky bar carries this action on small screens; keeps the header within the viewport now that it holds the mark */
     body{padding-bottom:72px}
+    html{scroll-padding-bottom:80px} /* keeps focused fields clear of the sticky bar */
   }
 
   /* Structural footer: company, navigation, and contact as three distinct
@@ -569,15 +571,21 @@
   form.querySelectorAll(uploadMode ? '.mailto-only' : '.upload-only').forEach(function(el){ el.remove(); });
 
   var MAX_FILES = 5, MAX_FILE = 25 * 1024 * 1024, MAX_TOTAL = 100 * 1024 * 1024;
+  var scrollBehavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
   function showError(msg){
     formError.textContent = msg;
     formError.style.display = 'block';
-    formError.scrollIntoView({behavior:'smooth', block:'center'});
+    formError.scrollIntoView({behavior:scrollBehavior, block:'center'});
   }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
     formError.style.display = 'none';
+    // Links are often pasted as "drive.google.com/..."; add the scheme so the url field accepts them.
+    var plansLink = document.getElementById('plans-link');
+    if (plansLink.value.trim() !== '' && !/^[a-z][a-z0-9+.-]*:\/\//i.test(plansLink.value.trim())){
+      plansLink.value = 'https://' + plansLink.value.trim();
+    }
     if (!form.checkValidity()){
       form.reportValidity();
       return;
@@ -638,7 +646,7 @@
     window.location.href = 'mailto:' + document.getElementById('email-text').textContent.trim() +
       '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     confirm.style.display = 'block';
-    confirm.scrollIntoView({behavior:'smooth', block:'center'});
+    confirm.scrollIntoView({behavior:scrollBehavior, block:'center'});
   });
 
   var copyBtn = document.getElementById('copy-btn');
@@ -668,6 +676,12 @@
     document.addEventListener('click', function(e){
       if (navToggle.hasAttribute('open') && !navToggle.contains(e.target)){
         navToggle.removeAttribute('open');
+      }
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && navToggle.hasAttribute('open')){
+        navToggle.removeAttribute('open');
+        navToggle.querySelector('summary').focus();
       }
     });
   }
