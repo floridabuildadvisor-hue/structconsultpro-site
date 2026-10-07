@@ -151,7 +151,7 @@
   .btn[disabled]{opacity:.6;cursor:progress}
   header .btn-primary{display:none}
   @media (min-width:768px){ header .btn-primary{display:inline-flex} }
-  /* While the hero or the send section (each with its own primary button) is on screen, the header button steps back. */
+  /* While the hero, the post-sample action or the send section (each with its own primary button) is on screen, the header button steps back. */
   header .btn-primary{transition:opacity .2s ease,visibility .2s}
   header.cta-on-screen .btn-primary{opacity:0;visibility:hidden}
 
@@ -253,6 +253,26 @@
   .scroll-hint{display:none;margin-top:10px;color:var(--muted)}
   @media (max-width:799px){ .scroll-hint{display:block} }
   .sample-note{margin-top:var(--sp-3);color:var(--muted);font-size:.9375rem}
+  /* Plan fragment keyed to the workbook: numbered marks match the Ref column (DM-2026-003). The SVG is decorative; the Ref column carries the information in text. */
+  .plan-frag{margin:0 0 var(--sp-3);max-width:560px}
+  .plan-frag .sheet{background:var(--paper);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+  .plan-frag svg{display:block;width:100%;height:auto}
+  .plan-frag figcaption{margin-top:10px;color:var(--muted)}
+  .plan-mark circle{fill:#4A5D6B;stroke:#FFFFFF;stroke-width:2}
+  .plan-mark text{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:500;fill:#FFFFFF;text-anchor:middle}
+  .wb-table .key{width:1%;white-space:nowrap;color:var(--muted)}
+  .ref-tag{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:24px;border-radius:50%;background:var(--secondary);color:var(--bg);font-family:var(--font-mono);font-weight:500;font-size:.75rem}
+  /* Questions log: unclear items listed as questions, not guessed (DM-2026-003). */
+  .qlog{margin-top:var(--sp-3);background:var(--bg);border:1px solid var(--border);border-radius:4px}
+  .qlog > .label{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+  .qlog ul{list-style:none;margin:0;padding:0}
+  .qlog li{padding:10px 14px;border-bottom:1px solid var(--border);font-size:.9375rem}
+  .qlog li:last-child{border-bottom:none}
+  .qlog .q-ref{font-family:var(--font-mono);font-size:.8125rem;color:var(--secondary);white-space:nowrap}
+  /* Next action right after the proof (DM-2026-004); the sticky bar and header button step back while it is on screen. */
+  .next-action{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2) var(--sp-4);margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--border)}
+  .next-action p{margin:0}
+  @media (max-width:767px){ .next-action{flex-direction:column;align-items:flex-start} }
 
   /* 05 SERVICE */
   .trades{display:flex;flex-wrap:wrap;gap:var(--sp-1);margin:var(--sp-3) 0 var(--sp-2)}
@@ -288,6 +308,11 @@
   .schedule-row dt{font-family:var(--font-mono);font-weight:500;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--secondary);margin:0;padding-top:3px}
   .schedule-row dd{margin:0;font-size:.9375rem}
   @media (max-width:560px){.schedule-row{grid-template-columns:1fr;gap:4px}}
+  /* Compact schedule for narrow columns: label above value (DM-2026-002, "Before you send"). */
+  .schedule.compact{margin-top:var(--sp-1)}
+  .schedule.compact .schedule-row{grid-template-columns:1fr;gap:4px;padding:12px var(--sp-2)}
+  .schedule.compact .schedule-row dd{font-size:.875rem}
+  .before-send{margin-top:var(--sp-3)}
   .claim{font-family:var(--font-display);font-weight:600;font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.3;margin:0 0 var(--sp-3);border-left:3px solid var(--secondary);padding-left:var(--sp-3);max-width:36ch}
 
   /* .faq-item — disclosure pattern. Height animates via grid-template-rows so no
@@ -348,7 +373,7 @@
   .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:4px 6px;margin:-4px -6px;min-height:auto} /* 24px target, same visual footprint */
 
   /* Sticky mobile action bar: keeps the one primary action reachable. Hidden while
-     the hero or the send section is on screen, so it never covers the hero and
+     the hero, the post-sample action or the send section is on screen, so it never covers the hero and
      never competes with another primary button. */
   .sticky-cta{display:none;position:fixed;left:0;right:0;bottom:0;z-index:15;padding:10px var(--sp-2) calc(10px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--border);transition:transform .2s ease,opacity .2s ease}
   .sticky-cta .btn{width:100%}
@@ -516,21 +541,45 @@
         <div><dt class="label">Addenda</dt><dd class="v" style="margin:4px 0 0">Addendum 1</dd></div>
         <div><dt class="label">Output</dt><dd class="v" style="margin:4px 0 0">Excel takeoff</dd></div>
       </dl>
+      <figure class="plan-frag">
+        <div class="sheet">
+          <svg viewBox="0 0 400 230" aria-hidden="true" focusable="false">
+            <g fill="none" stroke="#E2E5EA" stroke-width=".8"><path d="M0 40H400M0 120H400M0 200H400M60 0V230M200 0V230M340 0V230"/></g>
+            <g class="plan-minor" fill="#FFFFFF" stroke="#69707E" stroke-width=".8"><circle cx="60" cy="12" r="7"/><circle cx="200" cy="12" r="7"/><circle cx="340" cy="12" r="7"/></g>
+            <g class="plan-minor"><text class="plan-text" x="57.5" y="15">A</text><text class="plan-text" x="197.5" y="15">B</text><text class="plan-text" x="337.5" y="15">C</text></g>
+            <g fill="#1A1F26">
+              <rect x="60" y="40" width="280" height="6"/><rect x="60" y="40" width="6" height="160"/>
+              <rect x="334" y="40" width="6" height="160"/><rect x="60" y="194" width="110" height="6"/><rect x="216" y="194" width="124" height="6"/>
+              <rect x="140" y="46" width="4" height="70"/><rect x="140" y="146" width="4" height="48"/>
+            </g>
+            <rect x="196" y="46" width="8" height="148" fill="url(#hatch)" stroke="#4A5D6B" stroke-width="1.2"/>
+            <path d="M144 116 A30 30 0 0 1 174 146" fill="none" stroke="#69707E" stroke-width=".8"/><line x1="144" y1="116" x2="144" y2="146" stroke="#69707E" stroke-width=".8"/>
+            <g stroke="#69707E" stroke-width=".7"><line x1="204" y1="214" x2="340" y2="214"/><line x1="204" y1="209" x2="204" y2="219"/><line x1="340" y1="209" x2="340" y2="219"/></g>
+            <text class="plan-text plan-minor" x="254" y="226">22'-0"</text>
+            <text class="plan-text" x="72" y="124">LIVING</text>
+            <text class="plan-text" x="218" y="150">GARAGE</text>
+            <g class="plan-mark"><circle cx="300" cy="120" r="15"/><text x="300" y="125">1</text></g>
+            <g class="plan-mark"><circle cx="200" cy="78" r="15"/><text x="200" y="83">2</text></g>
+            <g class="plan-mark"><circle cx="168" cy="170" r="15"/><text x="168" y="175">3</text></g>
+          </svg>
+        </div>
+        <figcaption class="label">Illustrative sample · fictional plan set and quantities</figcaption>
+      </figure>
       <div class="workbook reveal">
         <div class="wb-bar"><span class="label">Takeoff workbook · illustrative</span><span class="label">Fictional plan set and quantities</span></div>
         <div class="table-scroll" role="region" aria-label="Illustrative takeoff table, fictional quantities" tabindex="0">
           <table class="wb-table">
             <thead>
-              <tr class="cols" aria-hidden="true"><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th></tr>
-              <tr class="hd"><th scope="col">Trade</th><th scope="col">Item</th><th scope="col">Location</th><th scope="col">Sheet ref</th><th scope="col" class="num">Qty</th><th scope="col">Unit</th><th scope="col">Note</th></tr>
+              <tr class="cols" aria-hidden="true"><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th></tr>
+              <tr class="hd"><th scope="col">Ref</th><th scope="col">Trade</th><th scope="col">Item</th><th scope="col">Location</th><th scope="col">Sheet ref</th><th scope="col" class="num">Qty</th><th scope="col">Unit</th><th scope="col">Note</th></tr>
             </thead>
             <tbody>
-              <tr><td class="trade">Concrete</td><td>Slab on grade, 4 in.</td><td>Garage</td><td class="ref">S-101</td><td class="num">7.4</td><td>CY</td><td>Net, no waste added</td></tr>
-              <tr><td class="trade">Framing</td><td>Wood studs, 2x4 at 16 in.</td><td>Level 1 partitions</td><td class="ref">A-101</td><td class="num">186</td><td>LF of wall</td><td>Wall type W1</td></tr>
-              <tr><td class="trade">Drywall</td><td>Drywall, 1/2 in. regular</td><td>Level 1 interior walls</td><td class="ref">A-201</td><td class="num">1,840</td><td>SF</td><td>Both faces where shown</td></tr>
-              <tr class="hit"><td class="trade">Drywall</td><td>Drywall, 5/8 in. Type X</td><td>Garage separation wall</td><td class="ref">A-201</td><td class="num">312</td><td>SF</td><td>Wall type W3</td></tr>
-              <tr><td class="trade">Doors</td><td>Interior door, 2'8" x 6'8"</td><td>Level 1</td><td class="ref">A-601</td><td class="num">9</td><td>EA</td><td>Per door schedule</td></tr>
-              <tr><td class="trade">Finishes</td><td>Baseboard</td><td>Level 1</td><td class="ref">A-101</td><td class="num">420</td><td>LF</td><td>Openings deducted</td></tr>
+              <tr><td class="key"><span class="ref-tag">1</span></td><td class="trade">Concrete</td><td>Slab on grade, 4 in.</td><td>Garage</td><td class="ref">S-101</td><td class="num">7.4</td><td>CY</td><td>Net, no waste added</td></tr>
+              <tr><td class="key">—</td><td class="trade">Framing</td><td>Wood studs, 2x4 at 16 in.</td><td>Level 1 partitions</td><td class="ref">A-101</td><td class="num">186</td><td>LF of wall</td><td>Wall type W1</td></tr>
+              <tr><td class="key">—</td><td class="trade">Drywall</td><td>Drywall, 1/2 in. regular</td><td>Level 1 interior walls</td><td class="ref">A-201</td><td class="num">1,840</td><td>SF</td><td>Both faces where shown</td></tr>
+              <tr class="hit"><td class="key"><span class="ref-tag">2</span></td><td class="trade">Drywall</td><td>Drywall, 5/8 in. Type X</td><td>Garage separation wall</td><td class="ref">A-201</td><td class="num">312</td><td>SF</td><td>Wall type W3</td></tr>
+              <tr><td class="key"><span class="ref-tag">3</span></td><td class="trade">Doors</td><td>Interior door, 2'8" x 6'8"</td><td>Level 1</td><td class="ref">A-601</td><td class="num">9</td><td>EA</td><td>Per door schedule</td></tr>
+              <tr><td class="key">—</td><td class="trade">Finishes</td><td>Baseboard</td><td>Level 1</td><td class="ref">A-101</td><td class="num">420</td><td>LF</td><td>Openings deducted</td></tr>
             </tbody>
           </table>
         </div>
@@ -538,7 +587,18 @@
         <div class="wb-basis"><span class="label">Based on</span><span class="label">Sheets A-101 · A-201 · A-601 · S-101 · Rev 2 · Addendum 1</span></div>
       </div>
       <p class="label scroll-hint">Swipe the table sideways to see every column</p>
+      <div class="qlog">
+        <p class="label">Questions log · illustrative</p>
+        <ul>
+          <li><span class="q-ref">Q-01 · A-201 ·</span> Wall W3 height is not dimensioned. Confirm 9'-0" before the final takeoff.</li>
+          <li><span class="q-ref">Q-02 · A-601 ·</span> Door hardware is not scheduled. Doors are counted; hardware is not quantified until confirmed.</li>
+        </ul>
+      </div>
       <p class="sample-note">Fictional plan set and quantities shown for demonstration only, not a client project. Anything unclear in the drawings is listed as a question for you, not guessed. Waste factors, pricing and markup stay with you.</p>
+      <div class="next-action">
+        <p>Vanessa Vieira, the founder, personally reviews every takeoff before it is delivered. <a href="#about">About the founder</a></p>
+        <a class="btn btn-primary" href="#send-form">Send your plans <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
     </div>
   </section>
 
@@ -700,6 +760,13 @@
           <p class="label">Send your plans</p>
           <h2 id="send-form" tabindex="-1">Request a quantity takeoff</h2>
           <p>Tell us about the project and attach your drawings. Scope, timeline, and cost are confirmed with you before any work starts, so sending this doesn't commit you to anything.</p>
+          <p class="label before-send">Before you send</p>
+          <dl class="schedule compact">
+            <div class="schedule-row"><dt>What to send</dt><dd>PDF plan sets · CAD or images in a ZIP · Or a Drive / Dropbox link</dd></div>
+            <div class="schedule-row"><dt>What happens next</dt><dd>Every request is read personally. You'll get a reply by email with any questions about the plans, then a fixed-price quote. The turnaround is confirmed in that reply, before any work starts.</dd></div>
+            <div class="schedule-row"><dt>Commitment</dt><dd>Sending this doesn't commit you to anything.</dd></div>
+            <div class="schedule-row"><dt>Who reads it</dt><dd>Every submission is read personally by the founder.</dd></div>
+          </dl>
         </div>
         <div class="c-8">
           <!-- Replace YOUR_FORM_ID with your actual Formspree form ID -->
@@ -983,7 +1050,7 @@
   var sendSection = document.getElementById('submit');
   var headerEl = document.querySelector('header');
   if (stickyCta && 'IntersectionObserver' in window){
-    // Sticky bar and header button both step back while the hero or the send section is on screen.
+    // Sticky bar and header button both step back while the hero, the post-sample action or the send section is on screen.
     var onScreen = new Set();
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
@@ -994,6 +1061,8 @@
     }, {threshold:0});
     io.observe(hero);
     io.observe(sendSection);
+    var nextAction = document.querySelector('.next-action');
+    if (nextAction){ io.observe(nextAction); }
   }
 
   // Reveal key elements once. Without JS, or with reduced motion, everything is simply visible.
