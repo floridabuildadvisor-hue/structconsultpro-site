@@ -783,13 +783,14 @@
         <div class="c-8">
           <!-- Replace YOUR_FORM_ID with your actual Formspree form ID -->
           <!-- While the placeholder is in place, the script keeps the prefilled-email fallback so the live form never posts to a non-existent endpoint. -->
-          <form id="project-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data" novalidate>
+          <form id="project-form" action="https://formspree.io/f/xoejeejz" data-uploads="off" method="POST" enctype="multipart/form-data" novalidate>
             <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
             <input type="hidden" name="submission_source" value="website_form">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
             <fieldset>
               <legend>Your plans</legend>
               <p class="hint upload-only">Upload your PDF or ZIP. If the set is too large, paste a link. If you already have the plans in your email, you can forward them instead.</p>
+              <p class="hint link-only">Paste a link to your plans. If you already have them in your email, you can forward them instead.</p>
               <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings there, or paste a link to them below if the set is large.</p>
               <div class="field upload-only">
                 <label for="plans">Attach PDF or ZIP</label>
@@ -913,8 +914,12 @@
   var formError = document.getElementById('form-error');
   var endpoint = form.getAttribute('action') || '';
   var uploadMode = endpoint !== '' && endpoint.indexOf('YOUR_FORM_ID') === -1;
+  // Link-only: the form posts directly but the provider plan takes no attachments (data-uploads="off").
+  var linkOnly = uploadMode && form.getAttribute('data-uploads') === 'off';
   // Remove the parts of the form that do not apply to the active intake mode.
-  form.querySelectorAll(uploadMode ? '.mailto-only' : '.upload-only').forEach(function(el){ el.remove(); });
+  var drop = !uploadMode ? '.upload-only, .link-only' : linkOnly ? '.mailto-only, .upload-only' : '.mailto-only, .link-only';
+  form.querySelectorAll(drop).forEach(function(el){ el.remove(); });
+  if (linkOnly){ document.querySelector('label[for="plans-link"]').firstChild.textContent = 'Link to your plans '; }
 
   var MAX_FILES = 5, MAX_FILE = 25 * 1024 * 1024, MAX_TOTAL = 100 * 1024 * 1024;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -938,7 +943,8 @@
       return;
     }
     if (uploadMode){
-      var files = Array.prototype.slice.call(document.getElementById('plans').files);
+      var fileInput = document.getElementById('plans');
+      var files = fileInput ? Array.prototype.slice.call(fileInput.files) : [];
       var total = files.reduce(function(sum, f){ return sum + f.size; }, 0);
       var emailAddr = document.getElementById('email-text').textContent.trim();
       var link = document.getElementById('plans-link').value.trim();
@@ -947,7 +953,7 @@
         return;
       }
       if (files.length === 0 && link === ''){
-        showError('Attach the plans or paste a link to them, so the drawings can be reviewed.');
+        showError(linkOnly ? 'Paste a link to the plans so the drawings can be reviewed. If they are in your email, forward them to ' + emailAddr + ' instead.' : 'Attach the plans or paste a link to them, so the drawings can be reviewed.');
         return;
       }
       var button = form.querySelector('button[type="submit"]');
