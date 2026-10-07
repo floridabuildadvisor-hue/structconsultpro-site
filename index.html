@@ -212,6 +212,16 @@
   .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:0;min-height:auto}
   #confirm{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--border);margin-top:var(--sp-2)}
   #confirm strong{display:block;margin-bottom:4px}
+  #confirm .next-step{display:block;margin-top:var(--sp-1);color:var(--muted);font-size:.92rem}
+  .sample h3{margin-bottom:var(--sp-1)}
+  .sample-meta{font-family:var(--font-mono);font-size:.76rem;letter-spacing:.04em;color:var(--secondary);margin-bottom:var(--sp-1)}
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius-sm)}
+  .sample-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.86rem}
+  .sample-table th{font-family:var(--font-mono);font-weight:500;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--secondary);text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);background:var(--surface);white-space:nowrap}
+  .sample-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+  .sample-table tr:last-child td{border-bottom:none}
+  .sample-table td:nth-child(3){white-space:nowrap}
+  .sample-table .num{text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
   #form-error{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--secondary);margin-top:var(--sp-2)}
   input[type="file"]{padding:10px 12px;cursor:pointer}
   .btn[disabled]{opacity:.6;cursor:progress}
@@ -312,8 +322,28 @@
       <li class="step"><span class="step-mark" aria-hidden="true"><span>02</span><small>SCP</small></span><div><h3>Review and organization</h3><p>Drawings are reviewed, the scope is confirmed, and the file set is organized before anything is extracted.</p></div></li>
       <li class="step"><span class="step-mark" aria-hidden="true"><span>03</span><small>SCP</small></span><div><h3>Quantity takeoff</h3><p>Quantities are extracted and classified by item and area.</p></div></li>
       <li class="step"><span class="step-mark" aria-hidden="true"><span>04</span><small>SCP</small></span><div><h3>Quality check</h3><p>Every takeoff is checked before final review, so nothing goes out unchecked.</p></div></li>
-      <li class="step"><span class="step-mark" aria-hidden="true"><span>05</span><small>SCP</small></span><div><h3>Delivery</h3><p>You receive a structured takeoff document, PDF or Excel, ready to use in your estimate.</p></div></li>
+      <li class="step"><span class="step-mark" aria-hidden="true"><span>05</span><small>SCP</small></span><div><h3>Delivery</h3><p>You receive a structured takeoff as an Excel workbook, ready to use in your estimate.</p></div></li>
     </ol>
+    <div class="card marked sample" id="sample" style="margin-top:var(--sp-4)">
+      <p class="eyebrow">Sample layout</p>
+      <h3>What a takeoff looks like</h3>
+      <p class="muted">Illustrative only: a fictional plan set with made-up quantities, not a client project. Real takeoffs follow this structure, delivered as an Excel workbook.</p>
+      <p class="sample-meta">Based on: Sheets A-101, A-201, A-601, S-101 · Rev 2 · Addendum 1</p>
+      <div class="table-scroll" role="region" aria-label="Sample takeoff table" tabindex="0">
+        <table class="sample-table">
+          <thead><tr><th scope="col">Item</th><th scope="col">Location</th><th scope="col">Sheet</th><th scope="col" class="num">Qty</th><th scope="col">Unit</th><th scope="col">Note</th></tr></thead>
+          <tbody>
+            <tr><td>Slab on grade, 4 in.</td><td>Garage</td><td>S-101</td><td class="num">7.4</td><td>CY</td><td>Net, no waste added</td></tr>
+            <tr><td>Wood studs, 2x4 at 16 in.</td><td>Level 1 partitions</td><td>A-101</td><td class="num">186</td><td>LF of wall</td><td>Wall type W1</td></tr>
+            <tr><td>Drywall, 1/2 in. regular</td><td>Level 1 interior walls</td><td>A-201</td><td class="num">1,840</td><td>SF</td><td>Both faces where shown</td></tr>
+            <tr><td>Drywall, 5/8 in. Type X</td><td>Garage separation wall</td><td>A-201</td><td class="num">312</td><td>SF</td><td>Wall type W3</td></tr>
+            <tr><td>Interior door, 2'8" x 6'8"</td><td>Level 1</td><td>A-601</td><td class="num">9</td><td>EA</td><td>Per door schedule</td></tr>
+            <tr><td>Baseboard</td><td>Level 1</td><td>A-101</td><td class="num">420</td><td>LF</td><td>Openings deducted</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="hint" style="margin-top:var(--sp-2)">Anything unclear in the drawings is listed as a question for you, not guessed. Waste factors, pricing and markup stay with you.</p>
+    </div>
   </section>
 
   <section class="surface" id="trust">
@@ -337,7 +367,7 @@
       <div class="faq-list">
         <div class="faq-item">
           <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1"><span>Can you work with my plans?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-1" role="region" aria-labelledby="faq-q-1"><div class="a-inner"><p>Yes, if they are PDF, image, or CAD files, for residential or commercial projects. If anything is missing or unreadable, you'll hear about it before work starts.</p></div></div>
+          <div class="faq-a" id="faq-a-1" role="region" aria-labelledby="faq-q-1"><div class="a-inner"><p>Yes, if they are PDF, image, or CAD files, for residential or commercial projects. Tell us the trades you need, for example concrete, framing, drywall or finishes, and the scope is confirmed after the plans are reviewed. Large plan sets are fine: share a Google Drive, Dropbox or OneDrive link instead of attaching. If anything is missing or unreadable, you'll hear about it before work starts.</p></div></div>
         </div>
         <div class="faq-item">
           <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2"><span>How accurate is the takeoff?</span><span class="chevron" aria-hidden="true"></span></button></h3>
@@ -349,11 +379,11 @@
         </div>
         <div class="faq-item">
           <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4"><span>What exactly do I receive?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-4" role="region" aria-labelledby="faq-q-4"><div class="a-inner"><p>A structured quantity takeoff document, delivered as PDF or Excel, organized by item and area and ready to drop into your estimate.</p></div></div>
+          <div class="faq-a" id="faq-a-4" role="region" aria-labelledby="faq-q-4"><div class="a-inner"><p>A structured quantity takeoff in an Excel workbook, organized by item and area, with the drawing sheets and revision it is based on, ready to drop into your estimate. See the <a href="#sample">sample layout</a>.</p></div></div>
         </div>
         <div class="faq-item">
           <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5"><span>Why not just use estimating software?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-5" role="region" aria-labelledby="faq-q-5"><div class="a-inner"><p>Software still needs someone to read the plans, enter the data, and catch what doesn't fit a template. Here, that work is done for you, and you get a document you can use right away instead of a license you have to learn.</p></div></div>
+          <div class="faq-a" id="faq-a-5" role="region" aria-labelledby="faq-q-5"><div class="a-inner"><p>Software still needs someone to set it up, learn it, read the plans and enter the data. Here there is no setup, no learning curve and no estimating workflow to maintain between bids: you send the plans for one project and receive organized quantities. If you already use Bluebeam, PlanSwift or another tool, the Excel takeoff can sit alongside your own workflow.</p></div></div>
         </div>
         <div class="faq-item">
           <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-6" id="faq-q-6"><span>Why not just hire an estimator?</span><span class="chevron" aria-hidden="true"></span></button></h3>
@@ -401,6 +431,7 @@
       <!-- While the placeholder is in place, the script keeps the prefilled-email fallback so the live form never posts to a non-existent endpoint. -->
       <form id="project-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" enctype="multipart/form-data" novalidate>
         <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
+        <input type="hidden" name="submission_source" value="website_form">
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
         <fieldset>
           <legend>Your contact details</legend>
@@ -408,10 +439,32 @@
             <div class="field"><label for="name">Name <span aria-hidden="true">*</span></label><input id="name" name="name" autocomplete="name" required></div>
             <div class="field"><label for="email">Email <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" autocomplete="email" required></div>
           </div>
+          <div class="row-2">
+            <div class="field"><label for="company">Company <span aria-hidden="true">*</span></label><input id="company" name="company" autocomplete="organization" required></div>
+            <div class="field"><label for="phone">Phone <span class="muted">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+          </div>
         </fieldset>
         <fieldset>
           <legend>About the project</legend>
           <div class="row-2">
+            <div class="field">
+              <label for="project">Project name <span aria-hidden="true">*</span></label>
+              <input id="project" name="project_name" required>
+            </div>
+            <div class="field">
+              <label for="location">Location <span aria-hidden="true">*</span></label>
+              <input id="location" name="location" placeholder="City and county, for example Miami Dade, FL" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="scope">What do you need measured? <span aria-hidden="true">*</span></label>
+            <textarea id="scope" name="scope" required placeholder="Trades or items, for example concrete, framing, drywall, finishes. Name the floors or areas if you only need part of the plans."></textarea>
+          </div>
+          <div class="row-2">
+            <div class="field">
+              <label for="due">Takeoff or bid due date <span aria-hidden="true">*</span></label>
+              <input id="due" name="due_date" placeholder="For example Oct 20, or no fixed date" required>
+            </div>
             <div class="field">
               <label for="ptype">Project type</label>
               <select id="ptype" name="ptype">
@@ -422,36 +475,31 @@
                 <option>Other</option>
               </select>
             </div>
-            <div class="field">
-              <label for="location">Location</label>
-              <input id="location" name="location" placeholder="City and county, for example Miami Dade, FL">
-            </div>
           </div>
-          <div class="row-2">
-            <div class="field">
-              <label for="stage">Project stage</label>
-              <select id="stage" name="stage">
-                <option>Bidding now</option>
-                <option>Preparing to bid</option>
-                <option>Just exploring cost</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="timeline">Timeline needed</label>
-              <input id="timeline" name="timeline" placeholder="For example, within one week">
-            </div>
+          <div class="field">
+            <label for="stage">Project stage</label>
+            <select id="stage" name="stage">
+              <option>Bidding now</option>
+              <option>Preparing to bid</option>
+              <option>Just exploring cost</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="plans-link">Link to the plans <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
+            <input id="plans-link" name="plans_link" type="url" inputmode="url" placeholder="https://">
+            <p class="hint">Best for large plan sets. Make sure the link lets us view or download the files.</p>
+          </div>
+          <div class="field upload-only">
+            <label for="plans">Or attach the plans</label>
+            <input id="plans" name="plans" type="file" multiple accept=".pdf,.zip">
+            <p class="hint">PDF or ZIP. Put DWG, DXF, images, specifications and addenda inside a ZIP. Up to 5 files, 25 MB each, 100 MB in total. Larger sets: use the link field above.</p>
           </div>
           <div class="field">
             <label for="notes">Anything else worth knowing</label>
-            <textarea id="notes" name="notes" placeholder="Scope, specific areas to focus on, questions"></textarea>
-          </div>
-          <div class="field upload-only">
-            <label for="plans">Project plans and drawings <span aria-hidden="true">*</span></label>
-            <input id="plans" name="plans" type="file" multiple accept=".pdf,.dwg,.dxf,.zip,.rar,.7z,.jpg,.jpeg,.png" required>
-            <p class="hint">PDF, DWG, DXF, ZIP, or image files. Up to 10 files, 25 MB each, 100 MB total. For larger plan sets, email them to the address below.</p>
+            <textarea id="notes" name="notes" placeholder="Drawing revision, addenda, access notes for the link, questions"></textarea>
           </div>
         </fieldset>
-        <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings and specifications there (PDF, image, or CAD export) and send.</p>
+        <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings there, or paste a link to them in the field above if the set is large.</p>
         <p class="privacy-note">Your project details and files are used to prepare your quantity takeoff and to communicate with you about the request. We do not sell your information.</p>
         <div>
           <button class="btn btn-primary" type="submit">Send takeoff request</button>
@@ -460,7 +508,8 @@
       <div id="form-error" role="alert"></div>
       <div id="confirm" role="status">
         <strong>Your email app should now be open.</strong>
-        Attach your drawings and press send there. If nothing opened, email the address below with your drawings and the details you entered.
+        Attach your drawings (or keep the link you added) and press send there. If nothing opened, email the address below with your drawings and the details you entered.
+        <span class="next-step">What happens next: every request is read personally. You'll get a reply by email with any questions about the plans, then a fixed-price quote. The turnaround is confirmed in that reply, before any work starts.</span>
       </div>
       <div class="contact-alt">
         <p class="muted" style="margin-bottom:var(--sp-1)">Prefer to email?</p>
@@ -519,7 +568,7 @@
   // Remove the parts of the form that do not apply to the active intake mode.
   form.querySelectorAll(uploadMode ? '.mailto-only' : '.upload-only').forEach(function(el){ el.remove(); });
 
-  var MAX_FILES = 10, MAX_FILE = 25 * 1024 * 1024, MAX_TOTAL = 100 * 1024 * 1024;
+  var MAX_FILES = 5, MAX_FILE = 25 * 1024 * 1024, MAX_TOTAL = 100 * 1024 * 1024;
   function showError(msg){
     formError.textContent = msg;
     formError.style.display = 'block';
@@ -537,8 +586,13 @@
       var files = Array.prototype.slice.call(document.getElementById('plans').files);
       var total = files.reduce(function(sum, f){ return sum + f.size; }, 0);
       var emailAddr = document.getElementById('email-text').textContent.trim();
+      var link = document.getElementById('plans-link').value.trim();
       if (files.length > MAX_FILES || files.some(function(f){ return f.size > MAX_FILE; }) || total > MAX_TOTAL){
-        showError('These files are over the upload limit (10 files, 25 MB each, 100 MB in total). Please email the plan set to ' + emailAddr + ' instead.');
+        showError('These files are over the upload limit (5 files, 25 MB each, 100 MB in total). Remove the attachments and paste a Google Drive, Dropbox or OneDrive link to the plans in the link field instead.');
+        return;
+      }
+      if (files.length === 0 && link === ''){
+        showError('Attach the plans or paste a link to them, so the drawings can be reviewed.');
         return;
       }
       var button = form.querySelector('button[type="submit"]');
@@ -561,19 +615,25 @@
       return;
     }
     function val(id){ return document.getElementById(id).value.trim(); }
-    var subject = 'Takeoff request: ' + val('ptype') + (val('location') ? ' (' + val('location') + ')' : '');
+    var subject = 'Takeoff request: ' + val('project') + ' (' + val('company') + ')';
     var body = [
       'Name: ' + val('name'),
+      'Company: ' + val('company'),
       'Email: ' + val('email'),
-      'Project type: ' + val('ptype'),
+      'Phone: ' + val('phone'),
+      'Project name: ' + val('project'),
       'Location: ' + val('location'),
+      'Takeoff or bid due date: ' + val('due'),
+      'Project type: ' + val('ptype'),
       'Project stage: ' + val('stage'),
-      'Timeline needed: ' + val('timeline'),
+      '',
+      'What I need measured:',
+      val('scope'),
+      '',
+      'Link to the plans: ' + (val('plans-link') || '(none, drawings attached)'),
       '',
       'Notes:',
-      val('notes'),
-      '',
-      '(Drawings and specifications attached)'
+      val('notes')
     ].join('\n');
     window.location.href = 'mailto:' + document.getElementById('email-text').textContent.trim() +
       '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
