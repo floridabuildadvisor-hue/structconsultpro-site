@@ -316,6 +316,10 @@
   .schedule.compact .schedule-row{grid-template-columns:1fr;gap:4px;padding:12px var(--sp-2)}
   .schedule.compact .schedule-row dd{font-size:.875rem}
   .before-send{margin-top:var(--sp-3)}
+  /* Method line: the documented sequence behind every takeoff. */
+  .method{margin:0 0 var(--sp-1)}
+  .method-proof{max-width:44ch;margin:0 0 var(--sp-3)}
+  .ci-tagline{margin:var(--sp-4) 0 0;color:var(--mass-ink);font-weight:500}
   .claim{font-family:var(--font-display);font-weight:600;font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.3;margin:0 0 var(--sp-3);border-left:3px solid var(--secondary);padding-left:var(--sp-3);max-width:36ch}
 
   /* .faq-item — disclosure pattern. Height animates via grid-template-rows so no
@@ -459,7 +463,7 @@
           <span class="display"><span>Turn plans</span> <span>into</span> <span class="seam">quantities.</span></span>
           <span class="desc">Quantity Takeoffs &amp; Bid Support for Small Contractors</span>
         </h1>
-        <p class="support">Send your plans. We review the set, confirm scope and cost, and deliver an organized quantity takeoff you can use for your own estimating and bidding.</p>
+        <p class="support">A construction intelligence firm that helps Florida contractors make better estimating decisions. Send the plans. We review the set, confirm scope and cost with you, and deliver structured, traceable quantities you can build your own estimate around.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#send-form">Send your plans <span class="arrow" aria-hidden="true">→</span></a>
           <a class="btn btn-text" href="#how">See how it works <span aria-hidden="true">↓</span></a>
@@ -642,12 +646,13 @@
     <div class="seam-band" aria-hidden="true"></div>
     <div class="wrap">
       <p class="label">Construction intelligence</p>
-      <h2 class="ci-statement reveal" id="ci-title">Make the information inside the plans usable.</h2>
+      <h2 class="ci-statement reveal" id="ci-title">We don't guess. We quantify what the plans support, document the basis, and flag what needs a decision.</h2>
       <ol class="rule-grid cols-3 reveal" style="margin-top:var(--sp-5)">
-        <li class="principle"><h3>Read</h3><p>Understand the document set.</p></li>
-        <li class="principle"><h3>Extract</h3><p>Turn drawings into measurable quantities.</p></li>
-        <li class="principle"><h3>Organize</h3><p>Deliver information in a format built for estimating.</p></li>
+        <li class="principle"><h3>01 Quantify</h3><p>Plan-based quantity takeoffs.</p></li>
+        <li class="principle"><h3>02 Check</h3><p>Quality control of our takeoff, and ambiguities flagged as questions.</p></li>
+        <li class="principle"><h3>03 Support</h3><p>Structured bid information that fits your own estimating workflow.</p></li>
       </ol>
+      <p class="ci-tagline">Built for contractors who would rather know than guess.</p>
     </div>
   </section>
 
@@ -662,6 +667,8 @@
       <div class="grid">
         <div class="c-5">
           <p class="claim">One documented process. One human review.</p>
+          <p class="label method">Plan → Scope → Quantify → Check → Document</p>
+          <p class="method-proof">Every quantity has a source. Ambiguities we find are flagged, not guessed. Every deliverable is reviewed before it reaches you.</p>
           <p class="scope-lead muted"><strong style="color:var(--text)">Scope:</strong> reading and quantifying what is drawn, item counts, measurements, and organized lists. Not engineering judgment, not structural calculation, not code compliance review, and not a substitute for a licensed engineer's seal where one is required.</p>
         </div>
         <dl class="schedule c-7">
@@ -723,21 +730,23 @@
   <section id="about" aria-labelledby="about-title">
     <div class="wrap grid">
       <div class="c-5">
-        <p class="label">Founder</p>
+        <p class="label">Founder & Construction Intelligence Lead</p>
         <h2 id="about-title">Vanessa Vieira</h2>
-        <p class="founder-lede">Civil engineering graduate from Brazil, building a construction technology company in the United States.</p>
+        <p class="founder-lede">Better information leads to better construction decisions.</p>
       </div>
       <div class="c-7">
-        <p>Vanessa Vieira holds a civil engineering degree from Brazil. Her education has been evaluated through the NCEES (National Council of Examiners for Engineering and Surveying) credential process, and she is pursuing the Fundamentals of Engineering (FE) exam as part of the path to U.S. professional licensure.</p>
-        <p>She founded StructConsultPro to deliver, today, the construction support that does not require a professional engineer's seal, while she continues toward full licensure.</p>
+        <p>Vanessa Vieira founded StructConsultPro around one principle: better information leads to better construction decisions. She holds a civil engineering degree from Brazil, with her credentials evaluated through the NCEES (National Council of Examiners for Engineering and Surveying) credential process.</p>
+        <p>Her work is focused on the part of the process where precision matters most: reading the documents, understanding the scope, structuring the quantities, identifying ambiguity, and delivering information an estimator can use. Every StructConsultPro takeoff is personally reviewed before delivery.</p>
+        <p>StructConsultPro provides quantity takeoffs, which do not require a professional engineer's seal, while Vanessa pursues the Fundamentals of Engineering (FE) exam as part of the path to U.S. professional licensure.</p>
+        <p><b>The standard is simple: quantify what is documented, flag what is unclear, and never manufacture certainty.</b></p>
         <div class="cards">
           <div class="card">
             <h3>Background</h3>
             <p>Civil engineering graduate from Brazil, currently pursuing U.S. engineering licensure. Credentials evaluated through NCEES; the FE exam is part of that pathway.</p>
           </div>
           <div class="card">
-            <h3>How the company works</h3>
-            <p>Technology first: a documented procedure for every takeoff, structured data, and AI used as a tool inside a human-reviewed process, never as a replacement for it. The focus is one service: quantity takeoffs.</p>
+            <h3>Technology-assisted. Human-reviewed.</h3>
+            <p>A documented procedure for every takeoff and structured data. AI is used as a tool inside a human-reviewed process, never as a replacement for it. Every deliverable is reviewed by Vanessa before delivery. The focus is one service: quantity takeoffs.</p>
           </div>
         </div>
       </div>
@@ -761,8 +770,8 @@
       <div class="wrap grid">
         <div class="c-4 intake-aside">
           <p class="label">Send your plans</p>
-          <h2 id="send-form" tabindex="-1">Request a quantity takeoff</h2>
-          <p>Tell us about the project and attach your drawings. Scope, timeline, and cost are confirmed with you before any work starts, so sending this doesn't commit you to anything.</p>
+          <h2 id="send-form" tabindex="-1">Send the plans. We'll confirm the scope with you.</h2>
+          <p>Tell us what you're bidding and send the drawings. We review the plan set first; scope, timeline, and cost are confirmed with you before any work starts, so sending this doesn't commit you to anything.</p>
           <p class="label before-send">Before you send</p>
           <dl class="schedule compact">
             <div class="schedule-row"><dt>What to send</dt><dd>PDF plan sets · CAD or images in a ZIP · Or a Drive / Dropbox link</dd></div>
