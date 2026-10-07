@@ -778,24 +778,45 @@
             <input type="hidden" name="submission_source" value="website_form">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
             <fieldset>
-              <legend>The project</legend>
-              <div class="row-2">
-                <div class="field"><label for="company">Company <span aria-hidden="true">*</span></label><input id="company" name="company" autocomplete="organization" required></div>
-                <div class="field"><label for="project">Project name <span aria-hidden="true">*</span></label><input id="project" name="project_name" required></div>
+              <legend>Your plans</legend>
+              <p class="hint upload-only">Upload your PDF or ZIP. If the set is too large, paste a link. If you already have the plans in your email, you can forward them instead.</p>
+              <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings there, or paste a link to them below if the set is large.</p>
+              <div class="field upload-only">
+                <label for="plans">Attach PDF or ZIP</label>
+                <input id="plans" name="plans" type="file" multiple accept=".pdf,.zip">
+                <p class="hint">Up to 5 files, 25 MB each, 100 MB in total. Put DWG, DXF, images, specifications and addenda inside a ZIP.</p>
               </div>
               <div class="field">
-                <label for="location">Location <span aria-hidden="true">*</span></label>
-                <input id="location" name="location" placeholder="City and county, for example Miami Dade, FL" required>
+                <label for="plans-link">Too large? Paste a link <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
+                <input id="plans-link" name="plans_link" type="url" inputmode="url" placeholder="https://">
+                <p class="hint">Set the link so anyone with it can view or download. Plans from Procore, BuildingConnected or PlanHub? Download them first, then attach them here.</p>
               </div>
+              <p class="hint">Already in your email? Forward them to <a href="mailto:intake@structconsultpro.com">intake@structconsultpro.com</a>.</p>
+            </fieldset>
+            <fieldset>
+              <legend>What we need</legend>
+              <div class="field"><label for="email">Your email <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" autocomplete="email" required></div>
               <div class="field">
                 <label for="scope">What do you need measured? <span aria-hidden="true">*</span></label>
                 <textarea id="scope" name="scope" required placeholder="Trades or items, for example concrete, framing, drywall, finishes. Name the floors or areas if you only need part of the plans."></textarea>
               </div>
+              <div class="field">
+                <label for="due">Takeoff or bid due date <span aria-hidden="true">*</span></label>
+                <input id="due" name="due_date" placeholder="For example Oct 20, or no fixed date" required>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Optional details</legend>
               <div class="row-2">
-                <div class="field">
-                  <label for="due">Takeoff or bid due date <span aria-hidden="true">*</span></label>
-                  <input id="due" name="due_date" placeholder="For example Oct 20, or no fixed date" required>
-                </div>
+                <div class="field"><label for="name">Name</label><input id="name" name="name" autocomplete="name"></div>
+                <div class="field"><label for="company">Company</label><input id="company" name="company" autocomplete="organization"></div>
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="project">Project name</label><input id="project" name="project_name"></div>
+                <div class="field"><label for="location">Location</label><input id="location" name="location" placeholder="City and county, for example Miami Dade, FL"></div>
+              </div>
+              <div class="row-2">
+                <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
                 <div class="field">
                   <label for="ptype">Project type</label>
                   <select id="ptype" name="ptype">
@@ -808,38 +829,6 @@
                   </select>
                 </div>
               </div>
-              <div class="field">
-                <label for="stage">Project stage</label>
-                <select id="stage" name="stage">
-                  <option value="">Select…</option>
-                  <option>Bidding now</option>
-                  <option>Preparing to bid</option>
-                  <option>Just exploring cost</option>
-                </select>
-              </div>
-            </fieldset>
-            <fieldset>
-              <legend>Plan set</legend>
-              <div class="field">
-                <label for="plans-link">Link to the plans <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
-                <input id="plans-link" name="plans_link" type="url" inputmode="url" placeholder="https://">
-                <p class="hint">Best for large plan sets. Make sure the link lets us view or download the files.</p>
-              </div>
-              <p class="label or upload-only">Or</p>
-              <div class="field upload-only">
-                <label for="plans">Attach the plans</label>
-                <input id="plans" name="plans" type="file" multiple accept=".pdf,.zip">
-                <p class="hint">PDF or ZIP. Put DWG, DXF, images, specifications and addenda inside a ZIP. Up to 5 files, 25 MB each, 100 MB in total. Larger sets: use the link field above.</p>
-              </div>
-              <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings there, or paste a link to them in the field above if the set is large.</p>
-            </fieldset>
-            <fieldset>
-              <legend>Your details</legend>
-              <div class="row-2">
-                <div class="field"><label for="name">Name <span aria-hidden="true">*</span></label><input id="name" name="name" autocomplete="name" required></div>
-                <div class="field"><label for="email">Email <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" autocomplete="email" required></div>
-              </div>
-              <div class="field"><label for="phone">Phone <span class="muted">(optional)</span></label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
               <div class="field">
                 <label for="notes">Anything else worth knowing</label>
                 <textarea id="notes" name="notes" placeholder="Drawing revision, addenda, access notes for the link, questions"></textarea>
@@ -969,7 +958,7 @@
       return;
     }
     function val(id){ return document.getElementById(id).value.trim(); }
-    var subject = 'Takeoff request: ' + val('project') + ' (' + val('company') + ')';
+    var subject = 'Takeoff request' + (val('project') ? ': ' + val('project') : '') + (val('company') ? ' (' + val('company') + ')' : '');
     var body = [
       'Name: ' + val('name'),
       'Company: ' + val('company'),
@@ -979,7 +968,6 @@
       'Location: ' + val('location'),
       'Takeoff or bid due date: ' + val('due'),
       'Project type: ' + val('ptype'),
-      'Project stage: ' + val('stage'),
       '',
       'What I need measured:',
       val('scope'),
