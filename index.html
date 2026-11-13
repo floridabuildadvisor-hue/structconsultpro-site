@@ -287,6 +287,8 @@
   /* 05 SERVICE */
   .trades{display:flex;flex-wrap:wrap;gap:var(--sp-1);margin:var(--sp-3) 0 var(--sp-2)}
   .trade-tag{font-family:var(--font-mono);font-weight:500;font-size:.8125rem;letter-spacing:.1em;padding:8px 14px;border:1px solid var(--border);border-radius:2px;background:var(--bg)}
+  .trade-tag a{color:inherit;text-decoration:none}
+  .trade-tag a:hover{color:var(--accent)}
   .service-out{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);line-height:1;font-weight:600;letter-spacing:-.025em;margin:12px 0 var(--sp-3)}
 
   /* 06 HOW IT WORKS */
@@ -641,9 +643,9 @@
         <p class="lead">Organized quantities extracted from contractor-provided plans for estimating and bidding.</p>
         <p class="label" style="margin-top:var(--sp-3)">For example</p>
         <ul class="trades" style="list-style:none;padding:0">
-          <li class="trade-tag">Concrete</li><li class="trade-tag">Framing</li><li class="trade-tag">Drywall</li><li class="trade-tag">Finishes</li>
+          <li class="trade-tag"><a href="/concrete-takeoff">Concrete</a></li><li class="trade-tag"><a href="/framing-takeoff">Framing</a></li><li class="trade-tag"><a href="/drywall-takeoff">Drywall</a></li><li class="trade-tag"><a href="/flooring-takeoff">Finishes</a></li><li class="trade-tag"><a href="/door-window-takeoff">Doors &amp; windows</a></li>
         </ul>
-        <p class="muted">Scope is confirmed after plan review.</p>
+        <p class="muted">Scope is confirmed after plan review. <a href="/resources">Free checklists for contractors</a></p>
       </div>
     </div>
   </section>
