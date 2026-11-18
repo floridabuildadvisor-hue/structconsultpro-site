@@ -1,0 +1,25 @@
+# StructConsultPro
+
+> Quantity takeoffs and bid support for small and mid size contractors in Florida. Contractors send their drawings and specifications; StructConsultPro returns an organized quantity takeoff in an Excel workbook, by item and area, traced to the drawing sheets and revision it is based on.
+
+Scope: reading and quantifying what is drawn, item counts, measurements, and organized lists. Not engineering judgment, not structural calculation, not code compliance review, and not a substitute for a licensed engineer's seal where one is required.
+
+How it works: send your plans, the plans are reviewed, scope and cost are agreed, then you receive your takeoff. Turnaround is confirmed after the drawings are reviewed, before any work starts. Every takeoff is reviewed by the founder, Vanessa Vieira, before delivery.
+
+## Services
+
+- [Drywall takeoff](https://structconsultpro.com/drywall-takeoff): Drywall takeoffs from your plan set
+- [Framing takeoff](https://structconsultpro.com/framing-takeoff): Framing takeoffs, counted from the sheets
+- [Concrete takeoff](https://structconsultpro.com/concrete-takeoff): Concrete quantities in CY, by element and sheet
+- [Flooring and finishes takeoff](https://structconsultpro.com/flooring-takeoff): Flooring and finish quantities by room
+- [Door and window takeoff](https://structconsultpro.com/door-window-takeoff): Door and window counts, plan checked against schedule
+
+## Start a request
+
+- [Send your plans](https://structconsultpro.com/send-your-plans): Send your plans. We'll confirm the scope with you.
+- [Home page and FAQ](https://structconsultpro.com/): Process, sample takeoff, scope and common questions
+- Email: intake@structconsultpro.com (plans and requests), support@structconsultpro.com (questions)
+
+## Optional
+
+- [Resources](https://structconsultpro.com/resources): Free checklists for Florida contractors
