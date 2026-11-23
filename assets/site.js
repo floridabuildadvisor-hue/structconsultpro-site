@@ -40,6 +40,24 @@
     ctaZones.forEach(function(el){ io.observe(el); });
   }
 
+  // WCAG 2.4.11: the browser does not scroll to a focused element that is already "on screen", so
+  // Tab can land on something hidden behind the sticky header or the bottom bar. Nudge it into view.
+  document.addEventListener('focusin', function(e){
+    // Next frame: after the browser's own focus scrolling has run.
+    requestAnimationFrame(function(){ keepVisible(e.target); });
+  });
+  function keepVisible(el){
+    var r = el.getBoundingClientRect();
+    // Off-screen targets are scrolled by the browser itself (scroll-padding clears header and bar).
+    if (!r.height || r.bottom <= 0 || r.top >= window.innerHeight){ return; }
+    if ((headerEl && headerEl.contains(el)) || (stickyCta && stickyCta.contains(el))){ return; }
+    var top = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
+    var barShown = stickyCta && getComputedStyle(stickyCta).display !== 'none' && !stickyCta.classList.contains('is-hidden');
+    var bottom = barShown ? stickyCta.getBoundingClientRect().top : window.innerHeight;
+    if (r.bottom > bottom){ window.scrollBy({top: r.bottom - bottom + 16, behavior: 'instant'}); }
+    else if (r.top < top){ window.scrollBy({top: r.top - top - 16, behavior: 'instant'}); }
+  }
+
   // First touch of the visit: UTM tags, landing page and referrer, kept for the session and
   // copied into any hidden tracking field on a form (see growth/lead-generation-system.md §4).
   var KEY = 'scp_first_touch', touch = null;

@@ -995,7 +995,7 @@
   </div>
 </footer>
 
-<script src="assets/uploader.js?v=20261123c"></script>
+<script src="assets/uploader.js?v=20261123d"></script>
 <script>
 (function(){
   var form = document.getElementById('project-form');
@@ -1177,6 +1177,24 @@
     io.observe(sendSection);
     var nextAction = document.querySelector('.next-action');
     if (nextAction){ io.observe(nextAction); }
+  }
+
+  // WCAG 2.4.11: the browser does not scroll to a focused element that is already "on screen", so
+  // Tab can land on something hidden behind the sticky header or the bottom bar. Nudge it into view.
+  document.addEventListener('focusin', function(e){
+    // Next frame: after the browser's own focus scrolling has run.
+    requestAnimationFrame(function(){ keepVisible(e.target); });
+  });
+  function keepVisible(el){
+    var r = el.getBoundingClientRect();
+    // Off-screen targets are scrolled by the browser itself (scroll-padding clears header and bar).
+    if (!r.height || r.bottom <= 0 || r.top >= window.innerHeight){ return; }
+    if ((headerEl && headerEl.contains(el)) || (stickyCta && stickyCta.contains(el))){ return; }
+    var top = headerEl ? headerEl.getBoundingClientRect().bottom : 0;
+    var barShown = stickyCta && getComputedStyle(stickyCta).display !== 'none' && !stickyCta.classList.contains('is-hidden');
+    var bottom = barShown ? stickyCta.getBoundingClientRect().top : window.innerHeight;
+    if (r.bottom > bottom){ window.scrollBy({top: r.bottom - bottom + 16, behavior: 'instant'}); }
+    else if (r.top < top){ window.scrollBy({top: r.top - top - 16, behavior: 'instant'}); }
   }
 
   // Reveal key elements once. Without JS, or with reduced motion, everything is simply visible.
