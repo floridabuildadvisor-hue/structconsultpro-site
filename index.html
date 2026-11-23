@@ -874,7 +874,7 @@
                 <div class="dropzone" id="dropzone">
                   <input id="plans" class="dz-input" type="file" multiple aria-describedby="dz-hint">
                   <label for="plans" class="dz-title">Drag your plans here, or <span class="dz-link">choose files</span></label>
-                  <span class="hint" id="dz-hint">Files or a whole project folder. PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 500 MB each. Uploading starts right away.</span>
+                  <span class="hint" id="dz-hint">PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 500 MB each. Uploading starts right away. Sending a whole project folder? Compress it into a ZIP first.</span>
                 </div>
                 <ul class="upload-list" id="upload-list"></ul>
               </div>
@@ -984,7 +984,7 @@
   </div>
 </footer>
 
-<script src="assets/uploader.js?v=20261123d"></script>
+<script src="assets/uploader.js?v=20261123e"></script>
 <script>
 (function(){
   var form = document.getElementById('project-form');
@@ -1046,6 +1046,7 @@
         button.textContent = 'Sending…';
         var data = new FormData(form);
         if (lines.length){ data.append('uploaded_files', lines.join('\n')); }
+        if (window.SCPUpload){ SCPUpload.stamp(data); }
         return fetch(endpoint, {method:'POST', body:data, headers:{'Accept':'application/json'}});
       })
       .then(function(response){

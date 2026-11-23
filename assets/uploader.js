@@ -8,8 +8,21 @@ window.SCPUpload = (function(){
   var MAX_FILES = 100, MAX_FILE = 500 * 1024 * 1024, MAX_TOTAL = 1024 * 1024 * 1024;
   var EXT = ['pdf','zip','7z','rar','dwg','dxf','dwf','dwfx','rvt','rfa','ifc','skp','nwd','nwc',
     'png','jpg','jpeg','tif','tiff','heic','webp','gif','bmp','xlsx','xls','csv','docx','doc','txt','rtf'];
-  // The thank-you page reads this to say which files arrived.
+  // The thank-you page reads these to say which files arrived and under which reference.
   var RECEIVED_KEY = 'scp_received';
+  var REFERENCE_KEY = 'scp_reference';
+
+  // One reference per visit, e.g. SCP-R-261123-7K4QXZ: shown on the thank-you page, sent in the
+  // notification email, and (lowercased, without dashes) the name of the Drive folder for the files.
+  // Letters and digits that are easy to read aloud; no 0/O or 1/I/L.
+  var REFERENCE = (function(){
+    var abc = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', d = new Date(), out = '';
+    var rnd = new Uint32Array(6);
+    (window.crypto || window.msCrypto).getRandomValues(rnd);
+    for (var i = 0; i < rnd.length; i++){ out += abc[rnd[i] % abc.length]; }
+    var ymd = String(d.getFullYear()).slice(2) + ('0' + (d.getMonth() + 1)).slice(-2) + ('0' + d.getDate()).slice(-2);
+    return 'SCP-R-' + ymd + '-' + out;
+  })();
 
   // Plain-text body keeps the request "simple", so the browser sends it to Google without a preflight.
   // (Upload-progress events would force a preflight, which Apps Script does not answer.)
@@ -97,6 +110,16 @@ window.SCPUpload = (function(){
   var api = {
     ACCEPT: EXT.map(function(e){ return '.' + e; }).join(','),
     RECEIVED_KEY: RECEIVED_KEY,
+    REFERENCE: REFERENCE,
+
+    // Called by the forms right before the request goes out: adds the reference to the
+    // notification email (field and subject) and keeps it for the thank-you page.
+    stamp: function(data){
+      data.append('reference', REFERENCE);
+      data.set('_subject', (data.get('_subject') || 'New request') + ' · ' + REFERENCE);
+      try { sessionStorage.setItem(REFERENCE_KEY, REFERENCE); } catch (e) {}
+      return data;
+    },
 
     // Resolves true only when the upload service answers, so the form can fall back to links.
     ready: function(){
@@ -110,7 +133,8 @@ window.SCPUpload = (function(){
     // Turns the drop area into an instant uploader. The returned object tells the form
     // how many files it holds and resolves the email lines once every upload has finished.
     zone: function(zone, input, list){
-      var submission = Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+      // Same reference as the email, so the Drive folder can be found from it.
+      var submission = REFERENCE.toLowerCase().replace(/-/g, '');
       var files = [], queue = Promise.resolve(), totalBytes = 0;
       input.setAttribute('accept', api.ACCEPT);
 

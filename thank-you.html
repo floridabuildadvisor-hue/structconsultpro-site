@@ -54,6 +54,7 @@
   footer a{color:var(--muted)}
   @media (max-width:360px){ .wordmark{font-size:.95rem;gap:8px} .wordmark .mark{width:28px;height:28px} }
   [hidden]{display:none !important}
+  .reference{font-size:1rem;margin:0 0 16px}.reference strong{font-family:var(--font-mono);font-weight:500;letter-spacing:.04em;margin-right:8px}.reference .muted{display:block;font-size:.875rem}
   .received{border:1px solid var(--border);border-left:3px solid var(--secondary);border-radius:6px;padding:16px;margin:0 0 24px;max-width:60ch}
   .received-title{font-weight:600;margin:0 0 8px}
   .received-list{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:.875rem}
@@ -71,6 +72,7 @@
 <main class="wrap">
   <p class="eyebrow">Request received</p>
   <h1>Thank you. Your takeoff request has been received.</h1>
+  <p class="reference" id="reference" hidden>Your reference: <strong id="reference-code"></strong><span class="muted">Use it in any email about this request.</span></p>
   <section class="received" id="received" hidden aria-labelledby="received-title">
     <p class="received-title" id="received-title"></p>
     <ul class="received-list" id="received-list"></ul>
@@ -87,13 +89,19 @@
   </div>
 </footer>
 <script>
-// Files uploaded with the request (saved by assets/uploader.js) are listed once, then forgotten.
+// Reference and uploaded files saved by assets/uploader.js are shown once, then forgotten.
 (function(){
-  var files = null;
+  var files = null, ref = null;
   try {
     files = JSON.parse(sessionStorage.getItem('scp_received') || 'null');
+    ref = sessionStorage.getItem('scp_reference');
     sessionStorage.removeItem('scp_received');
+    sessionStorage.removeItem('scp_reference');
   } catch (e) {}
+  if (ref){
+    document.getElementById('reference-code').textContent = ref;
+    document.getElementById('reference').hidden = false;
+  }
   if (!files || !files.length){ return; }
   function size(bytes){ return bytes < 1048576 ? Math.max(1, Math.round(bytes / 1024)) + ' KB' : (bytes / 1048576).toFixed(1) + ' MB'; }
   var total = files.reduce(function(sum, f){ return sum + f.size; }, 0);
