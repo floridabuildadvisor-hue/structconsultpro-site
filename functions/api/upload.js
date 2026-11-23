@@ -4,8 +4,10 @@
 //   GET  ?action=status                      -> {ready}
 //   POST ?action=create   {submission,name,size} -> {key, uploadId}
 //   PUT  ?action=part&key&uploadId&part       (raw bytes) -> {partNumber, etag}
-//   POST ?action=complete {key,uploadId,parts}   -> {key, size}
+//   POST ?action=complete {key,uploadId,parts}   -> {key, size, url?}
 //   POST ?action=abort    {key,uploadId}         -> {}
+// url is a signed download link for the notification email (only when DOWNLOAD_SECRET is set).
+import { downloadUrl } from './_sign.js';
 
 const MAX_FILE = 1024 * 1024 * 1024; // 1 GB per file
 const MAX_PART = 25 * 1024 * 1024;   // the browser sends 10 MB parts
@@ -81,7 +83,8 @@ export async function onRequest({ request, env }) {
         await bucket.delete(body.key);
         return json({ error: 'Each file must be 1 GB or smaller.' }, 400);
       }
-      return json({ key: body.key, size: object.size });
+      const link = env.DOWNLOAD_SECRET ? await downloadUrl(url.origin, env.DOWNLOAD_SECRET, body.key) : undefined;
+      return json({ key: body.key, size: object.size, url: link });
     }
   } catch (err) {
     return json({ error: 'Upload failed. Please try again.' }, 500);
