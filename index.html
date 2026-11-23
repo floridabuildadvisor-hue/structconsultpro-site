@@ -867,7 +867,7 @@
         <div class="c-8">
           <!-- Replace YOUR_FORM_ID with your actual Formspree form ID -->
           <!-- While the placeholder is in place, the script keeps the prefilled-email fallback so the live form never posts to a non-existent endpoint. -->
-          <form id="project-form" action="https://formspree.io/f/xoejeejz" data-uploads="r2" method="POST" enctype="multipart/form-data" novalidate>
+          <form id="project-form" action="https://formspree.io/f/xoejeejz" data-uploads="drive" method="POST" enctype="multipart/form-data" novalidate>
             <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
             <input type="hidden" name="submission_source" value="website_form">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
@@ -880,7 +880,7 @@
                 <div class="dropzone" id="dropzone">
                   <input id="plans" class="dz-input" type="file" multiple aria-describedby="dz-hint">
                   <label for="plans" class="dz-title">Drag your plans here, or <span class="dz-link">choose files</span></label>
-                  <span class="hint" id="dz-hint">Files or a whole project folder. PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 1 GB each. Uploading starts right away.</span>
+                  <span class="hint" id="dz-hint">Files or a whole project folder. PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 500 MB each. Uploading starts right away.</span>
                 </div>
                 <ul class="upload-list" id="upload-list"></ul>
               </div>
@@ -1003,9 +1003,9 @@
   var formError = document.getElementById('form-error');
   var endpoint = form.getAttribute('action') || '';
   var uploadMode = endpoint !== '' && endpoint.indexOf('YOUR_FORM_ID') === -1;
-  // data-uploads="r2": files go to the site's own storage (assets/uploader.js); until that storage
+  // data-uploads="drive": files go to Google Drive (assets/uploader.js); until that upload service
   // answers, the form stays link-only. The provider itself never receives attachments.
-  var r2 = uploadMode && form.getAttribute('data-uploads') === 'r2';
+  var drive = uploadMode && form.getAttribute('data-uploads') === 'drive';
   var linkOnly = uploadMode;
   // Remove the parts of the form that do not apply to the active intake mode.
   var drop = !uploadMode ? '.upload-only, .link-only' : '.mailto-only';
@@ -1017,7 +1017,7 @@
     linkLabel.textContent = 'Link to your plans ';
   }
   var uploads = null;
-  if (r2 && window.SCPUpload){
+  if (drive && window.SCPUpload){
     SCPUpload.ready().then(function(ready){
       if (!ready){ return; }
       linkOnly = false;

@@ -185,7 +185,7 @@
                 <div class="dropzone" id="dropzone">
                   <input id="plans" class="dz-input" type="file" multiple aria-describedby="dz-hint">
                   <label for="plans" class="dz-title">Drag your plans here, or <span class="dz-link">choose files</span></label>
-                  <span class="hint" id="dz-hint">Files or a whole project folder. PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 1 GB each. Uploading starts right away.</span>
+                  <span class="hint" id="dz-hint">Files or a whole project folder. PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 500 MB each. Uploading starts right away.</span>
                 </div>
                 <ul class="upload-list" id="upload-list"></ul>
               </div>
@@ -391,7 +391,7 @@
     formError.scrollIntoView({behavior:reduceMotion ? 'auto' : 'smooth', block:'center'});
   }
 
-  // Files go to the site's own storage (assets/uploader.js); until it answers, the link is required.
+  // Files go to Google Drive (assets/uploader.js); until that upload service answers, the link is required.
   var uploads = null;
   SCPUpload.ready().then(function(ready){
     if (!ready){ return; }

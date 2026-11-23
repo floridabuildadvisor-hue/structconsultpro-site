@@ -1,23 +1,30 @@
-// Plan uploads for the intake forms (see functions/api/upload.js). Files go to private
-// Cloudflare R2 storage in 10 MB parts as soon as they are dropped or chosen; the form then
-// sends only the list of stored files, with download links, in the notification email.
+// Plan uploads for the intake forms. Files go to the founder's Google Drive through a Google
+// Apps Script web app (source: structconsultpro-ops/intake-upload/Code.gs) in 4 MB pieces as soon
+// as they are dropped or chosen; the form then sends the list of Drive links in the notification email.
 window.SCPUpload = (function(){
-  var API = '/api/upload';
-  var PART = 10 * 1024 * 1024;
-  var MAX_FILES = 100, MAX_FILE = 1024 * 1024 * 1024, MAX_TOTAL = 2 * 1024 * 1024 * 1024;
+  // The Apps Script web app's /exec URL. Empty: uploads stay off and the forms ask for a link.
+  var ENDPOINT = '';
+  var PART = 4 * 1024 * 1024;
+  var MAX_FILES = 100, MAX_FILE = 500 * 1024 * 1024, MAX_TOTAL = 1024 * 1024 * 1024;
   var EXT = ['pdf','zip','7z','rar','dwg','dxf','dwf','dwfx','rvt','rfa','ifc','skp','nwd','nwc',
     'png','jpg','jpeg','tif','tiff','heic','webp','gif','bmp','xlsx','xls','csv','docx','doc','txt','rtf'];
 
-  function call(action, options, query){
-    return fetch(API + '?action=' + action + (query || ''), options).then(function(r){
-      return r.json().catch(function(){ return {}; }).then(function(body){
-        if (!r.ok){ throw new Error(body.error || ('status ' + r.status)); }
-        return body;
+  // Plain-text body keeps the request "simple", so the browser sends it to Google without a preflight.
+  function post(body){
+    return fetch(ENDPOINT, {method:'POST', body:JSON.stringify(body)}).then(function(r){
+      return r.json().catch(function(){ return {}; }).then(function(res){
+        if (!r.ok || res.error){ throw new Error(res.error || ('status ' + r.status)); }
+        return res;
       });
     });
   }
-  function post(action, body){
-    return call(action, {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify(body)});
+  function base64(blob){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onload = function(){ resolve(String(reader.result).split(',')[1] || ''); };
+      reader.onerror = function(){ reject(new Error('could not read the file')); };
+      reader.readAsDataURL(blob);
+    });
   }
   function retry(fn, tries){
     return fn().catch(function(err){ if (tries <= 1){ throw err; } return retry(fn, tries - 1); });
@@ -26,26 +33,19 @@ window.SCPUpload = (function(){
   function ext(name){ return name.split('.').pop().toLowerCase(); }
 
   function uploadFile(file, submission, onBytes){
-    return post('create', {submission:submission, name:file.name, size:file.size}).then(function(created){
-      var parts = [], offset = 0, number = 1;
+    return post({action:'create', submission:submission, name:file.name, size:file.size}).then(function(created){
+      var offset = 0;
       function next(){
-        if (offset >= file.size){
-          return post('complete', {key:created.key, uploadId:created.uploadId, parts:parts});
-        }
-        var chunk = file.slice(offset, offset + PART), partNumber = number;
-        var query = '&key=' + encodeURIComponent(created.key) + '&uploadId=' + encodeURIComponent(created.uploadId) + '&part=' + partNumber;
-        return retry(function(){ return call('part', {method:'PUT', body:chunk}, query); }, 3).then(function(done){
-          parts.push({partNumber:done.partNumber, etag:done.etag});
+        var chunk = file.slice(offset, offset + PART);
+        return base64(chunk).then(function(data){
+          return retry(function(){ return post({action:'part', id:created.id, offset:offset, data:data}); }, 3);
+        }).then(function(res){
           offset += chunk.size;
-          number += 1;
           onBytes(chunk.size);
-          return next();
+          return res.done ? res : next();
         });
       }
-      return next().catch(function(err){
-        post('abort', {key:created.key, uploadId:created.uploadId}).catch(function(){});
-        throw err;
-      });
+      return next();
     });
   }
 
@@ -80,7 +80,8 @@ window.SCPUpload = (function(){
 
     // Resolves true only when the site's storage is connected, so the form can fall back to links.
     ready: function(){
-      return fetch(API + '?action=status', {cache:'no-store'})
+      if (!ENDPOINT){ return Promise.resolve(false); }
+      return fetch(ENDPOINT, {cache:'no-store'})
         .then(function(r){ return r.ok ? r.json() : {}; })
         .then(function(body){ return body.ready === true; })
         .catch(function(){ return false; });
@@ -104,9 +105,9 @@ window.SCPUpload = (function(){
         picked.forEach(function(file){
           var problem = '';
           if (EXT.indexOf(ext(file.name)) === -1){ problem = '.' + ext(file.name) + ' is not accepted. Put it in a ZIP.'; }
-          else if (file.size > MAX_FILE){ problem = 'over 1 GB. Share a link for it instead.'; }
+          else if (file.size > MAX_FILE){ problem = 'over 500 MB. Share a link for it instead.'; }
           else if (files.filter(function(f){ return !f.removed && f.status !== 'error'; }).length >= MAX_FILES){ problem = 'more than 100 files. Put the rest in a ZIP.'; }
-          else if (totalBytes + file.size > MAX_TOTAL){ problem = 'over 2 GB in total. Share a link for the rest.'; }
+          else if (totalBytes + file.size > MAX_TOTAL){ problem = 'over 1 GB in total. Share a link for the rest.'; }
 
           var li = document.createElement('li');
           li.innerHTML = '<span class="uf-name"></span><span class="uf-size"></span><span class="uf-status" aria-live="polite"></span><button type="button" class="uf-remove">Remove</button>';
@@ -162,7 +163,7 @@ window.SCPUpload = (function(){
           return queue.then(function(){
             var kept = files.filter(function(f){ return !f.removed; });
             var lines = kept.filter(function(f){ return f.status === 'done'; }).map(function(f){
-              return f.file.name + ' (' + size(f.file.size) + ')\n' + (f.result.url || f.result.key);
+              return f.file.name + ' (' + size(f.file.size) + ')\n' + f.result.url;
             });
             kept.filter(function(f){ return f.status === 'error'; }).forEach(function(f){
               lines.push('NOT UPLOADED: ' + f.file.name + ' (' + f.error + ')');
