@@ -82,7 +82,8 @@
   .nav-toggle ul{list-style:none;margin:8px 0 0;padding:10px;position:absolute;right:0;top:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);min-width:210px;display:flex;flex-direction:column;gap:4px}
   .nav-toggle a{display:block;padding:10px;border-radius:var(--radius-sm);color:var(--text);text-decoration:none;font-size:.9375rem}
   .nav-toggle a:hover{background:var(--surface);color:var(--accent)}
-  @media (max-width:767px){
+  /* Subpages carry four links plus the header button: they only fit from 900px. */
+  @media (max-width:899px){
     nav.links{display:none}
     .nav-toggle{display:block}
   }

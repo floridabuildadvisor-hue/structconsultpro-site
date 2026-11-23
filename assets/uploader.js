@@ -194,14 +194,18 @@ window.SCPUpload = (function(){
           var item = {file:file, el:li, sent:0, status:'error', error:problem};
           files.push(item);
           li.querySelector('.uf-remove').addEventListener('click', function(){
+            // Keep keyboard focus in the list: the next file's Remove, else the previous one, else the picker.
+            var next = li.nextElementSibling || li.previousElementSibling;
             item.removed = true;
             if (item.status !== 'error'){ totalBytes -= file.size; }
             li.remove();
             renderSummary();
+            (next ? next.querySelector('.uf-remove') : input).focus();
           });
           li.querySelector('.uf-retry').addEventListener('click', function(){
             item.retryable = false;
             start(item);
+            li.querySelector('.uf-remove').focus();
           });
           if (problem){ render(item); return; }
           start(item);
