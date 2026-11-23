@@ -3,7 +3,7 @@
 // as they are dropped or chosen; the form then sends the list of Drive links in the notification email.
 window.SCPUpload = (function(){
   // The Apps Script web app's /exec URL. Empty: uploads stay off and the forms ask for a link.
-  var ENDPOINT = '';
+  var ENDPOINT = 'https://script.google.com/macros/s/AKfycbz5m-hdNsjg4d-GPKtytJfXojGzjZ75sKXTWbR3OnmORzgl581Pu_duH2d2TECbvcDf/exec';
   var PART = 4 * 1024 * 1024;
   var MAX_FILES = 100, MAX_FILE = 500 * 1024 * 1024, MAX_TOTAL = 1024 * 1024 * 1024;
   var EXT = ['pdf','zip','7z','rar','dwg','dxf','dwf','dwfx','rvt','rfa','ifc','skp','nwd','nwc',
