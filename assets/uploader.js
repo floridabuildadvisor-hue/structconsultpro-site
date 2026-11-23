@@ -135,7 +135,9 @@ window.SCPUpload = (function(){
               render(item);
             }, function(err){
               item.status = 'error';
-              item.error = err.message;
+              // The client sees a plain next step; the email keeps the technical reason.
+              item.error = 'Upload interrupted. Remove it and add it again, or share a link.';
+              item.detail = err.message;
               totalBytes -= file.size;
               render(item);
             });
@@ -166,7 +168,7 @@ window.SCPUpload = (function(){
               return f.file.name + ' (' + size(f.file.size) + ')\n' + f.result.url;
             });
             kept.filter(function(f){ return f.status === 'error'; }).forEach(function(f){
-              lines.push('NOT UPLOADED: ' + f.file.name + ' (' + f.error + ')');
+              lines.push('NOT UPLOADED: ' + f.file.name + ' (' + (f.detail || f.error) + ')');
             });
             return lines;
           });
