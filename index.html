@@ -384,9 +384,6 @@
   .privacy-note{font-size:.8125rem;color:var(--muted);margin:0}
   .form-actions{display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:center;justify-content:space-between;padding-top:var(--sp-3);border-top:1px solid var(--border)}
   #form-error{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--bg);border:1px solid var(--secondary);border-left-width:3px;margin-top:var(--sp-3)}
-  #confirm{display:none;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-md);background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--secondary);margin-top:var(--sp-3)}
-  #confirm strong{display:block;margin-bottom:4px}
-  #confirm .next-step{display:block;margin-top:var(--sp-1);color:var(--muted);font-size:.9375rem}
   .contact-alt{margin-top:var(--sp-4);padding-top:var(--sp-3);border-top:1px solid var(--border);font-size:.9375rem}
   .email-copy{display:inline-flex;align-items:center;gap:var(--sp-1);max-width:100%;flex-wrap:wrap;overflow-wrap:anywhere;font-family:var(--font-mono);background:var(--bg);border:1px solid var(--border);padding:8px 12px;border-radius:var(--radius-sm)}
   .email-copy button{border:none;background:none;color:var(--accent);font-family:var(--font-body);font-weight:600;font-size:.85rem;cursor:pointer;padding:4px 6px;margin:-4px -6px;min-height:auto} /* 24px target, same visual footprint */
@@ -865,8 +862,6 @@
           </dl>
         </div>
         <div class="c-8">
-          <!-- Replace YOUR_FORM_ID with your actual Formspree form ID -->
-          <!-- While the placeholder is in place, the script keeps the prefilled-email fallback so the live form never posts to a non-existent endpoint. -->
           <form id="project-form" action="https://formspree.io/f/xoejeejz" data-uploads="drive" method="POST" enctype="multipart/form-data" novalidate>
             <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
             <input type="hidden" name="submission_source" value="website_form">
@@ -875,7 +870,6 @@
               <legend>Your plans</legend>
               <p class="hint upload-only">Upload your plans and documents. You can also paste a link, or forward them by email if you already have them there.</p>
               <p class="hint link-only">Paste a link to your plans. If you already have them in your email, you can forward them instead.</p>
-              <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings there, or paste a link to them below if the set is large.</p>
               <div class="field upload-only">
                 <div class="dropzone" id="dropzone">
                   <input id="plans" class="dz-input" type="file" multiple aria-describedby="dz-hint">
@@ -938,11 +932,6 @@
             </div>
           </form>
           <div id="form-error" role="alert"></div>
-          <div id="confirm" role="status">
-            <strong>Your email app should now be open.</strong>
-            Attach your drawings (or keep the link you added) and press send there. If nothing opened, email the address below with your drawings and the details you entered.
-            <span class="next-step">What happens next: every request is read personally. You'll get a reply by email with any questions about the plans, then a fixed-price quote. The turnaround is confirmed in that reply, before any work starts.</span>
-          </div>
           <div class="contact-alt">
             <p class="muted" style="margin-bottom:var(--sp-1)">Prefer to email?</p>
             <span class="email-copy" id="email-copy">
@@ -999,23 +988,16 @@
 <script>
 (function(){
   var form = document.getElementById('project-form');
-  var confirm = document.getElementById('confirm');
   var formError = document.getElementById('form-error');
-  var endpoint = form.getAttribute('action') || '';
-  var uploadMode = endpoint !== '' && endpoint.indexOf('YOUR_FORM_ID') === -1;
+  var endpoint = form.getAttribute('action');
   // data-uploads="drive": files go to Google Drive (assets/uploader.js); until that upload service
   // answers, the form stays link-only. The provider itself never receives attachments.
-  var drive = uploadMode && form.getAttribute('data-uploads') === 'drive';
-  var linkOnly = uploadMode;
-  // Remove the parts of the form that do not apply to the active intake mode.
-  var drop = !uploadMode ? '.upload-only, .link-only' : '.mailto-only';
-  form.querySelectorAll(drop).forEach(function(el){ el.remove(); });
+  var drive = form.getAttribute('data-uploads') === 'drive';
+  var linkOnly = true;
   var linkLabel = document.querySelector('label[for="plans-link"]').firstChild;
   var uploadParts = form.querySelectorAll('.upload-only');
-  if (uploadMode){
-    uploadParts.forEach(function(el){ el.hidden = true; });
-    linkLabel.textContent = 'Link to your plans ';
-  }
+  uploadParts.forEach(function(el){ el.hidden = true; });
+  linkLabel.textContent = 'Link to your plans ';
   var uploads = null;
   if (drive && window.SCPUpload){
     SCPUpload.ready().then(function(ready){
@@ -1048,63 +1030,36 @@
       form.reportValidity();
       return;
     }
-    if (uploadMode){
-      var fileCount = uploads ? uploads.count() : 0;
-      var emailAddr = document.getElementById('email-text').textContent.trim();
-      var link = document.getElementById('plans-link').value.trim();
-      if (fileCount === 0 && link === ''){
-        showError(linkOnly ? 'Paste a link to the plans so the drawings can be reviewed. If they are in your email, forward them to ' + emailAddr + ' instead.' : 'Upload the plans or paste a link to them, so the drawings can be reviewed.');
-        return;
-      }
-      var button = form.querySelector('button[type="submit"]');
-      var label = button.innerHTML;
-      button.disabled = true;
-      button.textContent = fileCount ? 'Finishing upload…' : 'Sending…';
-      (uploads ? uploads.finish() : Promise.resolve([]))
-        .then(function(lines){
-          button.textContent = 'Sending…';
-          var data = new FormData(form);
-          if (lines.length){ data.append('uploaded_files', lines.join('\n')); }
-          return fetch(endpoint, {method:'POST', body:data, headers:{'Accept':'application/json'}});
-        })
-        .then(function(response){
-          if (response.ok){ window.location.href = 'thank-you.html'; return; }
-          return response.json().catch(function(){ return {}; }).then(function(data){
-            var detail = data && data.errors ? data.errors.map(function(err){ return err.message; }).join(' ') : '';
-            throw new Error(detail || ('status ' + response.status));
-          });
-        })
-        .catch(function(err){
-          button.disabled = false;
-          button.innerHTML = label;
-          showError('Your request could not be sent (' + err.message + '). Please try again, paste a link to the plans instead, or email your plans and details to ' + emailAddr + '.');
-        });
+    var fileCount = uploads ? uploads.count() : 0;
+    var emailAddr = document.getElementById('email-text').textContent.trim();
+    var link = document.getElementById('plans-link').value.trim();
+    if (fileCount === 0 && link === ''){
+      showError(linkOnly ? 'Paste a link to the plans so the drawings can be reviewed. If they are in your email, forward them to ' + emailAddr + ' instead.' : 'Upload the plans or paste a link to them, so the drawings can be reviewed.');
       return;
     }
-    function val(id){ return document.getElementById(id).value.trim(); }
-    var subject = 'Takeoff request' + (val('project') ? ': ' + val('project') : '') + (val('company') ? ' (' + val('company') + ')' : '');
-    var body = [
-      'Name: ' + val('name'),
-      'Company: ' + val('company'),
-      'Email: ' + val('email'),
-      'Phone: ' + val('phone'),
-      'Project name: ' + val('project'),
-      'Location: ' + val('location'),
-      'Takeoff or bid due date: ' + val('due'),
-      'Project type: ' + val('ptype'),
-      '',
-      'What I need measured:',
-      val('scope'),
-      '',
-      'Link to the plans: ' + (val('plans-link') || '(none, drawings attached)'),
-      '',
-      'Notes:',
-      val('notes')
-    ].join('\n');
-    window.location.href = 'mailto:' + document.getElementById('email-text').textContent.trim() +
-      '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    confirm.style.display = 'block';
-    confirm.scrollIntoView({behavior:scrollBehavior, block:'center'});
+    var button = form.querySelector('button[type="submit"]');
+    var label = button.innerHTML;
+    button.disabled = true;
+    button.textContent = fileCount ? 'Finishing upload…' : 'Sending…';
+    (uploads ? uploads.finish() : Promise.resolve([]))
+      .then(function(lines){
+        button.textContent = 'Sending…';
+        var data = new FormData(form);
+        if (lines.length){ data.append('uploaded_files', lines.join('\n')); }
+        return fetch(endpoint, {method:'POST', body:data, headers:{'Accept':'application/json'}});
+      })
+      .then(function(response){
+        if (response.ok){ window.location.href = 'thank-you.html'; return; }
+        return response.json().catch(function(){ return {}; }).then(function(data){
+          var detail = data && data.errors ? data.errors.map(function(err){ return err.message; }).join(' ') : '';
+          throw new Error(detail || ('status ' + response.status));
+        });
+      })
+      .catch(function(err){
+        button.disabled = false;
+        button.innerHTML = label;
+        showError('Your request could not be sent (' + err.message + '). Please try again, paste a link to the plans instead, or email your plans and details to ' + emailAddr + '.');
+      });
   });
 
   var copyBtn = document.getElementById('copy-btn');
