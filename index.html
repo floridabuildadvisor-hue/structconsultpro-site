@@ -371,6 +371,7 @@
   .field{display:flex;flex-direction:column;gap:6px}
   label{font-size:.875rem;font-weight:600}
   .hint{font-size:.8125rem;color:var(--muted);margin:0}
+  .upload-progress:empty,[hidden]{display:none !important}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)}
   @media (max-width:560px){.row-2{grid-template-columns:1fr}}
   .or{display:flex;align-items:center;gap:12px}
@@ -856,7 +857,7 @@
           <p>Tell us what you're bidding and send the drawings. We review the plan set first; scope, timeline, and cost are confirmed with you before any work starts, so sending this doesn't commit you to anything.</p>
           <p class="label before-send">Before you send</p>
           <dl class="schedule compact">
-            <div class="schedule-row"><dt>What to send</dt><dd>PDF plan sets · CAD or images in a ZIP · Or a Drive / Dropbox link</dd></div>
+            <div class="schedule-row"><dt>What to send</dt><dd>PDF plan sets · CAD files (DWG, DXF, RVT, IFC) · Images or a ZIP · Or a Drive / Dropbox link</dd></div>
             <div class="schedule-row"><dt>What happens next</dt><dd>Every request is read personally. You'll get a reply by email with any questions about the plans, then a fixed-price quote. The turnaround is confirmed in that reply, before any work starts.</dd></div>
             <div class="schedule-row"><dt>Commitment</dt><dd>Sending this doesn't commit you to anything.</dd></div>
             <div class="schedule-row"><dt>Who reads it</dt><dd>Every submission is read personally by the founder.</dd></div>
@@ -865,24 +866,25 @@
         <div class="c-8">
           <!-- Replace YOUR_FORM_ID with your actual Formspree form ID -->
           <!-- While the placeholder is in place, the script keeps the prefilled-email fallback so the live form never posts to a non-existent endpoint. -->
-          <form id="project-form" action="https://formspree.io/f/xoejeejz" data-uploads="off" method="POST" enctype="multipart/form-data" novalidate>
+          <form id="project-form" action="https://formspree.io/f/xoejeejz" data-uploads="r2" method="POST" enctype="multipart/form-data" novalidate>
             <input type="hidden" name="_subject" value="New Quantity Takeoff Request – StructConsultPro">
             <input type="hidden" name="submission_source" value="website_form">
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
             <fieldset>
               <legend>Your plans</legend>
-              <p class="hint upload-only">Upload your PDF or ZIP. If the set is too large, paste a link. If you already have the plans in your email, you can forward them instead.</p>
+              <p class="hint upload-only">Upload your plans and documents. You can also paste a link, or forward them by email if you already have them there.</p>
               <p class="hint link-only">Paste a link to your plans. If you already have them in your email, you can forward them instead.</p>
               <p class="hint mailto-only">When you press send, your email app opens with these details filled in. Attach your drawings there, or paste a link to them below if the set is large.</p>
               <div class="field upload-only">
-                <label for="plans">Attach PDF or ZIP</label>
-                <input id="plans" name="plans" type="file" multiple accept=".pdf,.zip">
-                <p class="hint">Up to 5 files, 25 MB each, 100 MB in total. Put DWG, DXF, images, specifications and addenda inside a ZIP.</p>
+                <label for="plans">Upload files</label>
+                <input id="plans" name="plans" type="file" multiple>
+                <p class="hint">PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word. Up to 20 files, 1 GB each.</p>
+                <p class="hint upload-progress" id="upload-progress" role="status" aria-live="polite"></p>
               </div>
               <div class="field">
-                <label for="plans-link">Too large? Paste a link <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
+                <label for="plans-link">Or paste a link <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
                 <input id="plans-link" name="plans_link" type="url" inputmode="url" placeholder="https://">
-                <p class="hint">Set the link so anyone with it can view or download. Plans from Procore, BuildingConnected or PlanHub? Download them first, then attach them here.</p>
+                <p class="hint">Set the link so anyone with it can view or download. Plans from Procore, BuildingConnected or PlanHub? Download them first, then upload them here.</p>
               </div>
               <p class="hint">Already in your email? Forward them to <a href="mailto:intake@structconsultpro.com">intake@structconsultpro.com</a>.</p>
             </fieldset>
@@ -990,6 +992,7 @@
   </div>
 </footer>
 
+<script src="assets/uploader.js"></script>
 <script>
 (function(){
   var form = document.getElementById('project-form');
@@ -997,14 +1000,30 @@
   var formError = document.getElementById('form-error');
   var endpoint = form.getAttribute('action') || '';
   var uploadMode = endpoint !== '' && endpoint.indexOf('YOUR_FORM_ID') === -1;
-  // Link-only: the form posts directly but the provider plan takes no attachments (data-uploads="off").
-  var linkOnly = uploadMode && form.getAttribute('data-uploads') === 'off';
+  // data-uploads="r2": files go to the site's own storage (assets/uploader.js); until that storage
+  // answers, the form stays link-only. The provider itself never receives attachments.
+  var r2 = uploadMode && form.getAttribute('data-uploads') === 'r2';
+  var linkOnly = uploadMode;
   // Remove the parts of the form that do not apply to the active intake mode.
-  var drop = !uploadMode ? '.upload-only, .link-only' : linkOnly ? '.mailto-only, .upload-only' : '.mailto-only, .link-only';
+  var drop = !uploadMode ? '.upload-only, .link-only' : '.mailto-only';
   form.querySelectorAll(drop).forEach(function(el){ el.remove(); });
-  if (linkOnly){ document.querySelector('label[for="plans-link"]').firstChild.textContent = 'Link to your plans '; }
+  var linkLabel = document.querySelector('label[for="plans-link"]').firstChild;
+  var uploadParts = form.querySelectorAll('.upload-only');
+  if (uploadMode){
+    uploadParts.forEach(function(el){ el.hidden = true; });
+    linkLabel.textContent = 'Link to your plans ';
+  }
+  if (r2 && window.SCPUpload){
+    document.getElementById('plans').setAttribute('accept', SCPUpload.ACCEPT);
+    SCPUpload.ready().then(function(ready){
+      if (!ready){ return; }
+      linkOnly = false;
+      uploadParts.forEach(function(el){ el.hidden = false; });
+      form.querySelectorAll('.link-only').forEach(function(el){ el.hidden = true; });
+      linkLabel.textContent = 'Or paste a link ';
+    });
+  }
 
-  var MAX_FILES = 5, MAX_FILE = 25 * 1024 * 1024, MAX_TOTAL = 100 * 1024 * 1024;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var scrollBehavior = reduceMotion ? 'auto' : 'smooth';
   function showError(msg){
@@ -1027,23 +1046,34 @@
     }
     if (uploadMode){
       var fileInput = document.getElementById('plans');
-      var files = fileInput ? Array.prototype.slice.call(fileInput.files) : [];
-      var total = files.reduce(function(sum, f){ return sum + f.size; }, 0);
+      var files = fileInput && !linkOnly ? Array.prototype.slice.call(fileInput.files) : [];
       var emailAddr = document.getElementById('email-text').textContent.trim();
       var link = document.getElementById('plans-link').value.trim();
-      if (files.length > MAX_FILES || files.some(function(f){ return f.size > MAX_FILE; }) || total > MAX_TOTAL){
-        showError('These files are over the upload limit (5 files, 25 MB each, 100 MB in total). Remove the attachments and paste a Google Drive, Dropbox or OneDrive link to the plans in the link field instead.');
+      var tooBig = files.length ? SCPUpload.check(files) : '';
+      if (tooBig){
+        showError(tooBig);
         return;
       }
       if (files.length === 0 && link === ''){
-        showError(linkOnly ? 'Paste a link to the plans so the drawings can be reviewed. If they are in your email, forward them to ' + emailAddr + ' instead.' : 'Attach the plans or paste a link to them, so the drawings can be reviewed.');
+        showError(linkOnly ? 'Paste a link to the plans so the drawings can be reviewed. If they are in your email, forward them to ' + emailAddr + ' instead.' : 'Upload the plans or paste a link to them, so the drawings can be reviewed.');
         return;
       }
       var button = form.querySelector('button[type="submit"]');
       var label = button.innerHTML;
+      var progress = document.getElementById('upload-progress');
       button.disabled = true;
-      button.textContent = 'Sending…';
-      fetch(endpoint, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+      button.textContent = files.length ? 'Uploading…' : 'Sending…';
+      var stored = files.length ? SCPUpload.upload(files, function(pct){
+        progress.textContent = 'Uploading ' + files.length + (files.length === 1 ? ' file' : ' files') + ': ' + pct + '%';
+      }) : Promise.resolve([]);
+      stored
+        .then(function(lines){
+          button.textContent = 'Sending…';
+          var data = new FormData(form);
+          data.delete('plans');
+          if (lines.length){ data.append('uploaded_files', lines.join('\n')); }
+          return fetch(endpoint, {method:'POST', body:data, headers:{'Accept':'application/json'}});
+        })
         .then(function(response){
           if (response.ok){ window.location.href = 'thank-you.html'; return; }
           return response.json().catch(function(){ return {}; }).then(function(data){
@@ -1054,7 +1084,8 @@
         .catch(function(err){
           button.disabled = false;
           button.innerHTML = label;
-          showError('Your request could not be sent (' + err.message + '). Please try again, or email your plans and details to ' + emailAddr + '.');
+          progress.textContent = '';
+          showError('Your request could not be sent (' + err.message + '). Please try again, paste a link to the plans instead, or email your plans and details to ' + emailAddr + '.');
         });
       return;
     }

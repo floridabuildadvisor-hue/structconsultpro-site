@@ -313,6 +313,7 @@
   .field{display:flex;flex-direction:column;gap:6px}
   label{font-size:.875rem;font-weight:600}
   .hint{font-size:.8125rem;color:var(--muted);margin:0}
+.upload-progress:empty,[hidden]{display:none !important}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)}
   @media (max-width:560px){.row-2{grid-template-columns:1fr}}
   .or{display:flex;align-items:center;gap:12px}

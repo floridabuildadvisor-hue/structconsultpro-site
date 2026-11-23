@@ -165,7 +165,7 @@
           <p>Four fields are required. The rest help the review go faster, and you can skip them.</p>
           <p class="label before-send">Before you send</p>
           <dl class="schedule compact">
-            <div class="schedule-row"><dt>What to send</dt><dd>A Google Drive, Dropbox or OneDrive link to the PDF plan set, or CAD and images in a ZIP.</dd></div>
+            <div class="schedule-row"><dt>What to send</dt><dd>Upload the PDF plan set, CAD files, images or a ZIP, or share a Google Drive, Dropbox or OneDrive link.</dd></div>
             <div class="schedule-row"><dt>What happens next</dt><dd>Every request is read personally. You'll get a reply by email with any questions about the plans, then a fixed-price quote. The turnaround is confirmed in that reply, before any work starts.</dd></div>
             <div class="schedule-row"><dt>Commitment</dt><dd>Sending this doesn't commit you to anything.</dd></div>
             <div class="schedule-row"><dt>Who reads it</dt><dd>Every submission is read personally by the founder.</dd></div>
@@ -181,10 +181,16 @@
             <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
             <fieldset>
               <legend>Your plans</legend>
+              <div class="field upload-only" hidden>
+                <label for="plans">Upload files</label>
+                <input id="plans" type="file" multiple>
+                <p class="hint">PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word. Up to 20 files, 1 GB each.</p>
+                <p class="hint upload-progress" id="upload-progress" role="status" aria-live="polite"></p>
+              </div>
               <div class="field">
-                <label for="plans-link">Link to your plans <span aria-hidden="true">*</span> <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
-                <input id="plans-link" name="plans_link" type="url" inputmode="url" placeholder="https://" required>
-                <p class="hint">Set the link so anyone with it can view or download. Plans from Procore, BuildingConnected or PlanHub? Download them first, then share a link.</p>
+                <label for="plans-link"><span id="link-label">Link to your plans</span> <span aria-hidden="true" id="link-required">*</span> <span class="muted">(Google Drive, Dropbox, OneDrive or similar)</span></label>
+                <input id="plans-link" name="plans_link" type="url" inputmode="url" placeholder="https://">
+                <p class="hint">Set the link so anyone with it can view or download. Plans from Procore, BuildingConnected or PlanHub? Download them first, then upload them or share a link.</p>
               </div>
               <p class="hint">Already in your email? Forward them to <a href="mailto:intake@structconsultpro.com">intake@structconsultpro.com</a>.</p>
             </fieldset>
@@ -368,6 +374,7 @@
 </footer>
 
 <script src="/assets/site.js"></script>
+<script src="/assets/uploader.js"></script>
 
 <script>
 (function(){
@@ -381,6 +388,18 @@
     formError.style.display = 'block';
     formError.scrollIntoView({behavior:reduceMotion ? 'auto' : 'smooth', block:'center'});
   }
+
+  // Files go to the site's own storage (assets/uploader.js); until it answers, the link is required.
+  var fileInput = document.getElementById('plans');
+  var uploadsReady = false;
+  fileInput.setAttribute('accept', SCPUpload.ACCEPT);
+  SCPUpload.ready().then(function(ready){
+    if (!ready){ return; }
+    uploadsReady = true;
+    form.querySelector('.upload-only').hidden = false;
+    document.getElementById('link-label').textContent = 'Or paste a link';
+    document.getElementById('link-required').hidden = true;
+  });
 
   // Trade pages link here with ?trade=<slug>; tick that box.
   var trade = new URLSearchParams(location.search).get('trade');
@@ -401,16 +420,35 @@
       form.reportValidity();
       return;
     }
+    var files = uploadsReady ? Array.prototype.slice.call(fileInput.files) : [];
+    var tooBig = files.length ? SCPUpload.check(files) : '';
+    if (tooBig){
+      showError(tooBig);
+      return;
+    }
+    if (files.length === 0 && plansLink.value.trim() === ''){
+      showError(uploadsReady ? 'Upload the plans or paste a link to them, so the drawings can be reviewed.' : 'Paste a link to the plans so the drawings can be reviewed. If they are in your email, forward them to ' + emailAddr + ' instead.');
+      return;
+    }
     // Ticked trades travel as one field, so the notification email shows them on one line.
     var picked = Array.prototype.map.call(form.querySelectorAll('input[name="trade_choice"]:checked'), function(b){ return b.value; });
     document.getElementById('service-interest').value = picked.join(', ');
-    var data = new FormData(form);
-    data.delete('trade_choice');
     var button = form.querySelector('button[type="submit"]');
     var label = button.innerHTML;
+    var progress = document.getElementById('upload-progress');
     button.disabled = true;
-    button.textContent = 'Sending…';
-    fetch(endpoint, {method:'POST', body:data, headers:{'Accept':'application/json'}})
+    button.textContent = files.length ? 'Uploading…' : 'Sending…';
+    var stored = files.length ? SCPUpload.upload(files, function(pct){
+      progress.textContent = 'Uploading ' + files.length + (files.length === 1 ? ' file' : ' files') + ': ' + pct + '%';
+    }) : Promise.resolve([]);
+    stored
+      .then(function(lines){
+        button.textContent = 'Sending…';
+        var data = new FormData(form);
+        data.delete('trade_choice');
+        if (lines.length){ data.append('uploaded_files', lines.join('\n')); }
+        return fetch(endpoint, {method:'POST', body:data, headers:{'Accept':'application/json'}});
+      })
       .then(function(response){
         if (response.ok){ window.location.href = '/thank-you.html'; return; }
         return response.json().catch(function(){ return {}; }).then(function(d){
@@ -421,7 +459,8 @@
       .catch(function(err){
         button.disabled = false;
         button.innerHTML = label;
-        showError('Your request could not be sent (' + err.message + '). Please try again, or email your plans and details to ' + emailAddr + '.');
+        progress.textContent = '';
+        showError('Your request could not be sent (' + err.message + '). Please try again, paste a link to the plans instead, or email your plans and details to ' + emailAddr + '.');
       });
   });
 
