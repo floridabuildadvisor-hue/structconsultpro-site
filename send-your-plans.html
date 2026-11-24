@@ -90,7 +90,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="/assets/site.css?v=20261123e">
+<link rel="stylesheet" href="/assets/site.css?v=20261123f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -149,7 +149,7 @@
       <p class="label">What happens next</p>
       <h2 id="how-title">Four steps, the same every time.</h2>
       <ol class="rule-grid cols-4 steps">
-        <li class="step"><span class="num" aria-hidden="true">01</span><h3>Send your plans</h3><p>Share a link to the plan set with the form below.</p></li>
+        <li class="step"><span class="num" aria-hidden="true">01</span><h3>Send your plans</h3><p>Upload the plan set or share a link with the form below.</p></li>
         <li class="step"><span class="num" aria-hidden="true">02</span><h3>We review</h3><p>We review the documents and determine whether the request can be scoped.</p></li>
         <li class="step"><span class="num" aria-hidden="true">03</span><h3>Scope &amp; cost agreed</h3><p>You receive a fixed-price quote for the defined scope.</p></li>
         <li class="step"><span class="num" aria-hidden="true">04</span><h3>Receive your takeoff</h3><p>An organized Excel quantity takeoff, with the marked-up plan sheets (PDF) and an assumptions and exclusions sheet.</p></li>
@@ -162,7 +162,7 @@
         <div class="c-4 intake-aside">
           <p class="label">Send your plans</p>
           <h2 id="send-form" tabindex="-1">Your plans and what you need measured.</h2>
-          <p>Four fields are required. The rest help the review go faster, and you can skip them.</p>
+          <p>Three fields are required, plus your plans (upload or a link). The rest help the review go faster, and you can skip them.</p>
           <p class="label before-send">Before you send</p>
           <dl class="schedule compact">
             <div class="schedule-row"><dt>What to send</dt><dd>Upload the PDF plan set, CAD files, images or a ZIP, or share a Google Drive, Dropbox or OneDrive link.</dd></div>
@@ -184,7 +184,7 @@
               <div class="field upload-only" hidden>
                 <div class="dropzone" id="dropzone">
                   <input id="plans" class="dz-input" type="file" multiple aria-describedby="dz-hint">
-                  <label for="plans" class="dz-title">Drag your plans here, or <span class="dz-link">choose files</span></label>
+                  <label for="plans" class="dz-title"><span class="dz-drag">Drag your plans here, or </span><span class="dz-link">choose files</span></label>
                   <span class="hint" id="dz-hint">PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 500 MB each. Uploading starts right away. Sending a whole project folder? Compress it into a ZIP first.</span>
                 </div>
                 <ul class="upload-list" id="upload-list"></ul>
@@ -375,8 +375,8 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=20261123e"></script>
-<script src="/assets/uploader.js?v=20261123e"></script>
+<script src="/assets/site.js?v=20261123f"></script>
+<script src="/assets/uploader.js?v=20261123f"></script>
 
 <script>
 (function(){
@@ -432,8 +432,14 @@
     var label = button.innerHTML;
     button.disabled = true;
     button.textContent = fileCount ? 'Finishing upload…' : 'Sending…';
+    // While files are still going up, say how many are left.
+    var ticker = fileCount ? setInterval(function(){
+      var n = uploads.pending();
+      if (n){ button.textContent = 'Finishing upload · ' + n + (n === 1 ? ' file left' : ' files left'); }
+    }, 500) : null;
     (uploads ? uploads.finish() : Promise.resolve([]))
       .then(function(lines){
+        clearInterval(ticker);
         button.textContent = 'Sending…';
         var data = new FormData(form);
         data.delete('trade_choice');

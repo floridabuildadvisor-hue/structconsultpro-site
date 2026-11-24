@@ -136,13 +136,16 @@ window.SCPUpload = (function(){
       // Same reference as the email, so the Drive folder can be found from it.
       var submission = REFERENCE.toLowerCase().replace(/-/g, '');
       var files = [], queue = Promise.resolve(), totalBytes = 0;
+      // The form's plan-link field, offered as the way out when a file can't be uploaded.
+      var linkField = document.getElementById('plans-link');
       input.setAttribute('accept', api.ACCEPT);
 
       // One summary line under the list; it is the only part read out by screen readers.
       var summary = document.createElement('p');
       summary.className = 'upload-summary';
       summary.setAttribute('role', 'status');
-      summary.innerHTML = '<span class="us-count"></span><span class="us-bytes" aria-hidden="true"></span>';
+      summary.innerHTML = '<span class="us-count"></span><span class="us-bytes" aria-hidden="true"></span>' +
+        '<span class="us-bar" aria-hidden="true"><i></i></span>';
       list.parentNode.insertBefore(summary, list.nextSibling);
 
       function live(){ return files.filter(function(f){ return !f.removed; }); }
@@ -155,13 +158,17 @@ window.SCPUpload = (function(){
         var failed = kept.length - active.length;
         var sent = 0, total = 0;
         active.forEach(function(f){ sent += f.sent; total += f.file.size; });
-        if (!kept.length){ summary.querySelector('.us-count').textContent = ''; summary.querySelector('.us-bytes').textContent = ''; return; }
+        var bar = summary.querySelector('.us-bar i');
+        if (!kept.length){ summary.querySelector('.us-count').textContent = ''; summary.querySelector('.us-bytes').textContent = ''; bar.style.width = '0%'; return; }
         var count = done.length === active.length
-          ? (active.length > 1 ? 'All ' + active.length + ' files uploaded' : active.length ? 'File uploaded' : 'No files uploaded')
+          ? (active.length > 1 ? 'All ' + active.length + ' files uploaded' : active.length ? 'File uploaded' : 'No files uploaded') +
+            (active.length && !(kept.length - active.length) ? ' · you can send your request' : '')
           : 'Uploading ' + (done.length + 1) + ' of ' + active.length + (active.length === 1 ? ' file' : ' files');
         if (failed){ count += ' · ' + failed + ' need' + (failed === 1 ? 's' : '') + ' attention'; }
         summary.querySelector('.us-count').textContent = count;
-        summary.querySelector('.us-bytes').textContent = total ? ' · ' + size(sent) + ' of ' + size(total) : '';
+        summary.querySelector('.us-bytes').textContent = total && done.length !== active.length ? ' · ' + size(sent) + ' of ' + size(total) : '';
+        bar.style.width = total ? Math.min(100, Math.round(sent / total * 100)) + '%' : '0%';
+        summary.classList.toggle('is-done', !!active.length && done.length === active.length);
       }
 
       function render(item){
@@ -169,6 +176,7 @@ window.SCPUpload = (function(){
           : item.status === 'waiting' ? 'Waiting' : item.sent === 0 ? 'Starting…' : Math.min(99, Math.round(item.sent / item.file.size * 100)) + '%';
         item.el.querySelector('.uf-status').textContent = text;
         item.el.querySelector('.uf-retry').hidden = !(item.status === 'error' && item.retryable);
+        item.el.querySelector('.uf-link').hidden = !(item.status === 'error' && linkField);
         item.el.className = 'uf uf-' + item.status;
         renderSummary();
       }
@@ -209,7 +217,8 @@ window.SCPUpload = (function(){
 
           var li = document.createElement('li');
           li.innerHTML = '<span class="uf-name"></span><span class="uf-size"></span><span class="uf-status"></span>' +
-            '<button type="button" class="uf-retry" hidden>Retry</button><button type="button" class="uf-remove">Remove</button>';
+            '<button type="button" class="uf-retry" hidden>Retry</button><button type="button" class="uf-link" hidden>Use a link instead</button>' +
+            '<button type="button" class="uf-remove">Remove</button>';
           li.querySelector('.uf-name').textContent = file.name;
           li.querySelector('.uf-size').textContent = size(file.size);
           li.querySelector('.uf-retry').setAttribute('aria-label', 'Retry ' + file.name);
@@ -225,6 +234,11 @@ window.SCPUpload = (function(){
             li.remove();
             renderSummary();
             (next ? next.querySelector('.uf-remove') : input).focus();
+          });
+          li.querySelector('.uf-link').addEventListener('click', function(){
+            if (!linkField){ return; }
+            linkField.scrollIntoView({block:'center', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+            linkField.focus({preventScroll:true});
           });
           li.querySelector('.uf-retry').addEventListener('click', function(){
             item.retryable = false;
@@ -269,6 +283,8 @@ window.SCPUpload = (function(){
 
       return {
         count: function(){ return files.filter(function(f){ return !f.removed && f.status !== 'error'; }).length; },
+        // Files still waiting or uploading, for the submit button's "files left" text.
+        pending: function(){ return live().filter(function(f){ return f.status === 'waiting' || f.status === 'uploading'; }).length; },
         // Waits for uploads still running, then returns one line per stored file. Files that
         // could not be stored don't hold up the rest; the email names them so nothing goes unnoticed.
         finish: function(){

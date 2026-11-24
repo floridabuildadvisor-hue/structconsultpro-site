@@ -215,19 +215,12 @@
   .rule-grid > *{padding:var(--sp-3) 0;border-top:1px solid var(--border);position:relative}
   .rule-grid > *::before{content:"";position:absolute;top:-1px;left:0;width:40px;height:2px;background:var(--secondary)}
   @media (min-width:768px){
-    .rule-grid.cols-3{grid-template-columns:repeat(3,1fr)} .rule-grid.cols-4{grid-template-columns:repeat(2,1fr)}
+    .rule-grid.cols-4{grid-template-columns:repeat(2,1fr)}
     .rule-grid > *{padding-right:var(--sp-3)}
   }
   @media (min-width:1024px){ .rule-grid.cols-4{grid-template-columns:repeat(4,1fr)} }
 
   /* 02 PROOF — three stages */
-  .proof{padding-block:var(--sp-5)}
-  @media (min-width:1024px){ .proof{padding-block:var(--sp-6)} }
-  .stage .n{font-family:var(--font-mono);font-size:.875rem;color:var(--muted)}
-  .stage h3{font-size:clamp(1.25rem,2.4vw,1.75rem);font-weight:600;letter-spacing:-.015em;text-transform:uppercase;margin:6px 0 8px;line-height:1.1}
-  .stage p{margin:0;color:var(--muted);font-size:.9375rem}
-  .stage .to{position:absolute;right:var(--sp-3);top:var(--sp-3);font-family:var(--font-mono);color:var(--secondary)}
-  @media (max-width:767px){ .stage .to{transform:rotate(90deg)} }
 
   /* 03 PROBLEM */
   .statement{font-family:var(--font-display);font-size:clamp(1.9rem,5vw,3.5rem);line-height:1.05;font-weight:600;letter-spacing:-.025em;margin:16px 0 var(--sp-3);max-width:20ch}
@@ -290,7 +283,6 @@
   .trade-tag{font-family:var(--font-mono);font-weight:500;font-size:.8125rem;letter-spacing:.1em;padding:8px 14px;border:1px solid var(--border);border-radius:2px;background:var(--bg)}
   .trade-tag a{color:inherit;text-decoration:none}
   .trade-tag a:hover{color:var(--accent)}
-  .service-out{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);line-height:1;font-weight:600;letter-spacing:-.025em;margin:12px 0 var(--sp-3)}
 
   /* 06 HOW IT WORKS */
   .steps{margin-top:var(--sp-5)}
@@ -301,11 +293,8 @@
 
   /* 07 CONSTRUCTION INTELLIGENCE (mass section) */
   section.mass{border-top:none}
-  .ci-statement{font-family:var(--font-display);font-size:clamp(1.9rem,5vw,3.5rem);line-height:1.05;font-weight:600;letter-spacing:-.025em;margin:16px 0 0;max-width:18ch;color:var(--mass-ink)}
   .mass .rule-grid > *{border-color:var(--mass-line)}
   .mass .rule-grid > *::before{background:var(--mass-seam)}
-  .principle h3{font-family:var(--font-mono);font-weight:500;font-size:.875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mass-ink)}
-  .principle p{margin:8px 0 0;color:var(--mass-muted);font-size:.9375rem}
   .mass .seam-band{position:absolute;top:0;bottom:0;right:0;width:18%;border-left:2px solid var(--mass-seam);background:repeating-linear-gradient(90deg,transparent 0 23px,var(--mass-line) 23px 24px);opacity:.45;pointer-events:none}
   .mass .wrap{position:relative;z-index:1}
   @media (max-width:767px){ .mass .seam-band{width:12%} }
@@ -314,7 +303,6 @@
   .spec-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--text);border-bottom:1px solid var(--border);margin:var(--sp-3) 0 var(--sp-5)}
   @media (min-width:1024px){ .spec-strip{grid-template-columns:repeat(4,minmax(0,1fr))} }
   .spec-strip div{padding:var(--sp-3) var(--sp-2) var(--sp-3) 0;font-family:var(--font-mono);font-weight:500;font-size:clamp(.875rem,1.4vw,1rem);letter-spacing:.08em;text-transform:uppercase}
-  .scope-lead{font-size:1rem;max-width:62ch}
   .schedule{border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin:0;background:var(--bg)}
   .schedule-row{display:grid;grid-template-columns:150px 1fr;gap:var(--sp-2);padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--border)}
   .schedule-row:last-child{border-bottom:none}
@@ -327,9 +315,9 @@
   .schedule.compact .schedule-row dd{font-size:.875rem}
   .before-send{margin-top:var(--sp-3)}
   /* Method line: the documented sequence behind every takeoff. */
-  .method{margin:0 0 var(--sp-1)}
+  .why-close{margin:var(--sp-4) 0 0;max-width:62ch;font-size:1.0625rem;color:var(--muted)}
+  .why-close strong{display:block;color:var(--text);font-family:var(--font-display);font-size:clamp(1.25rem,2.6vw,1.75rem);line-height:1.2;letter-spacing:-.015em;margin-bottom:8px;text-wrap:balance}
   .method-proof{max-width:44ch;margin:0 0 var(--sp-3)}
-  .ci-tagline{margin:var(--sp-4) 0 0;color:var(--mass-ink);font-weight:500}
   .claim{font-family:var(--font-display);font-weight:600;font-size:clamp(1.25rem,2.6vw,1.6rem);line-height:1.3;margin:0 0 var(--sp-3);border-left:3px solid var(--secondary);padding-left:var(--sp-3);max-width:36ch}
 
   /* .faq-item — disclosure pattern. Height animates via grid-template-rows so no
@@ -372,7 +360,8 @@
   label{font-size:.875rem;font-weight:600}
   .hint{font-size:.8125rem;color:var(--muted);margin:0}
   .upload-progress:empty,[hidden]{display:none !important}
-  .dropzone{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:32px 16px;border:1.5px dashed var(--muted);border-radius:var(--radius-md);cursor:pointer}.dropzone:hover,.dropzone.is-over{border-color:var(--accent);border-style:solid}.dropzone:focus-within{outline:2px solid var(--accent);outline-offset:2px}.dz-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.dz-title{font-weight:600;color:var(--text)}.dz-link{text-decoration:underline}.upload-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}.upload-list:empty{display:none}.uf{display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:center;font-size:.875rem;padding:4px 4px 4px 12px;border:1px solid var(--border);border-radius:var(--radius-sm)}.uf-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}.uf-size,.uf-status{color:var(--muted);font-variant-numeric:tabular-nums}.uf-size{white-space:nowrap}.uf-done .uf-status{color:var(--text)}.uf-error{border-left:3px solid var(--secondary)}.uf-error .uf-status{grid-column:1/-1;order:9;padding-bottom:8px;color:var(--text);font-weight:600;white-space:normal}.uf-remove,.uf-retry{background:none;border:none;padding:0 12px;min-height:44px;min-width:44px;color:var(--muted);font:inherit;text-decoration:underline;cursor:pointer}.upload-summary{margin:0;font-size:.875rem;color:var(--text);font-variant-numeric:tabular-nums}.upload-summary:empty,.upload-summary:has(.us-count:empty){display:none}.us-bytes{color:var(--muted)}.uf-done .uf-status::before{content:'\2713\00a0'}@media (max-width:480px){.uf{grid-template-columns:1fr auto auto}.uf-name{grid-column:1/-1}}
+  .dropzone{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:32px 16px;border:1.5px dashed var(--muted);border-radius:var(--radius-md);cursor:pointer}.dropzone:hover,.dropzone.is-over{border-color:var(--accent);border-style:solid}.dropzone:focus-within{outline:2px solid var(--accent);outline-offset:2px}.dz-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.dz-title{font-weight:600;color:var(--text)}.dz-link{text-decoration:underline}.upload-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}.upload-list:empty{display:none}.uf{display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:center;font-size:.875rem;padding:4px 4px 4px 12px;border:1px solid var(--border);border-radius:var(--radius-sm)}.uf-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}.uf-size,.uf-status{color:var(--muted);font-variant-numeric:tabular-nums}.uf-size{white-space:nowrap}.uf-done .uf-status{color:var(--text)}.uf-error{border-left:3px solid var(--secondary)}.uf-error .uf-status{grid-column:1/-1;order:9;padding-bottom:8px;color:var(--text);font-weight:600;white-space:normal}.uf-remove,.uf-retry,.uf-link{background:none;border:none;padding:0 12px;min-height:44px;min-width:44px;color:var(--muted);font:inherit;text-decoration:underline;cursor:pointer}.upload-summary{margin:0;font-size:.875rem;color:var(--text);font-variant-numeric:tabular-nums}.upload-summary:empty,.upload-summary:has(.us-count:empty){display:none}.us-bytes{color:var(--muted)}.uf-done .uf-status::before{content:'\2713\00a0'}@media (max-width:480px){.uf{grid-template-columns:1fr auto auto}.uf-name{grid-column:1/-1}}
+.us-bar{display:block;height:4px;margin-top:8px;background:var(--border);border-radius:2px;overflow:hidden}.us-bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}.upload-summary.is-done .us-bar{display:none}@media (prefers-reduced-motion:reduce){.us-bar i{transition:none}}.uf-error{grid-template-columns:1fr repeat(4,auto)}@media (max-width:480px){.uf-error{grid-template-columns:1fr auto auto}}@media (pointer:coarse){.dz-drag{display:none}.dz-link{display:inline-block;padding:12px 22px;min-height:44px;border-radius:var(--radius-sm);background:var(--cta-bg);color:var(--cta-ink);text-decoration:none;font-weight:600}.dz-link::first-letter{text-transform:uppercase}}
   .row-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-2)}
   @media (max-width:560px){.row-2{grid-template-columns:1fr}}
   .or{display:flex;align-items:center;gap:12px}
@@ -590,34 +579,7 @@
     </div>
   </section>
 
-  <!-- 02 IMMEDIATE PROOF -->
-  <section class="proof surface" aria-labelledby="proof-title">
-    <div class="wrap">
-      <h2 class="label" id="proof-title" style="margin:0 0 var(--sp-1)">What happens to your plans</h2>
-      <ol class="rule-grid cols-3 reveal">
-        <li class="stage"><span class="n">01</span><h3>Plan set</h3><p>The drawings and specs you already have.</p><span class="to" aria-hidden="true">→</span></li>
-        <li class="stage"><span class="n">02</span><h3>Quantity extraction</h3><p>Items counted and measured from what is drawn.</p><span class="to" aria-hidden="true">→</span></li>
-        <li class="stage"><span class="n">03</span><h3>Organized workbook</h3><p>Quantities by item, area and sheet, in Excel.</p></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- 03 THE PROBLEM -->
-  <section aria-labelledby="problem-title">
-    <div class="wrap">
-      <p class="label">How it fits</p>
-      <h2 class="statement reveal" id="problem-title">You already have the plans. <span>You need the quantities.</span></h2>
-      <p class="lead">Contractors don't need another complicated platform just to get quantities from a plan set. This sits alongside the way you already work.</p>
-      <ul class="rule-grid cols-4 facts reveal">
-        <li><span class="label">No new software</span><p>Nothing to install or maintain between bids.</p></li>
-        <li><span class="label">No implementation</span><p>Send the plans for one project.</p></li>
-        <li><span class="label">No learning curve</span><p>Works alongside Bluebeam, PlanSwift, Excel or your own tools.</p></li>
-        <li><span class="label">No back-office system</span><p>Estimating, pricing and bidding decisions stay with you.</p></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- 04 WHAT A TAKEOFF LOOKS LIKE -->
+  <!-- 02 WHAT YOU GET (sample + outputs + trades) -->
   <section class="surface" id="takeoff" aria-labelledby="takeoff-title">
     <div class="wrap">
       <p class="label">Illustrative sample</p>
@@ -683,6 +645,11 @@
         </ul>
       </div>
       <p class="sample-note">Fictional plan set and quantities shown for demonstration only, not a client project. Anything unclear in the drawings is listed as a question for you, not guessed. Waste factors, pricing and markup stay with you.</p>
+      <p class="label" style="margin-top:var(--sp-4)">Takeoffs by trade, for example</p>
+      <ul class="trades" style="list-style:none;padding:0">
+        <li class="trade-tag"><a href="/concrete-takeoff">Concrete</a></li><li class="trade-tag"><a href="/framing-takeoff">Framing</a></li><li class="trade-tag"><a href="/drywall-takeoff">Drywall</a></li><li class="trade-tag"><a href="/flooring-takeoff">Finishes</a></li><li class="trade-tag"><a href="/door-window-takeoff">Doors &amp; windows</a></li>
+      </ul>
+      <p class="muted">Scope is confirmed after plan review. <a href="/resources">Free checklists for contractors</a></p>
       <div class="next-action">
         <p>Vanessa Vieira, the founder, personally reviews every takeoff before it is delivered. <a href="#about">About the founder</a></p>
         <a class="btn btn-primary" href="#send-form">Send your plans <span class="arrow" aria-hidden="true">→</span></a>
@@ -690,7 +657,7 @@
     </div>
   </section>
 
-  <!-- 05 HOW IT WORKS -->
+  <!-- 03 HOW IT WORKS -->
   <section id="how" aria-labelledby="how-title">
     <div class="wrap">
       <p class="label">How it works</p>
@@ -704,40 +671,23 @@
     </div>
   </section>
 
-  <!-- 06 SERVICE -->
-  <section class="surface" aria-labelledby="service-title">
-    <div class="wrap grid">
-      <div class="c-5">
-        <p class="label">One core output</p>
-        <h2 class="service-out" id="service-title">Quantity takeoffs</h2>
-      </div>
-      <div class="c-7">
-        <p class="lead">Organized quantities extracted from contractor-provided plans for estimating and bidding.</p>
-        <p class="label" style="margin-top:var(--sp-3)">For example</p>
-        <ul class="trades" style="list-style:none;padding:0">
-          <li class="trade-tag"><a href="/concrete-takeoff">Concrete</a></li><li class="trade-tag"><a href="/framing-takeoff">Framing</a></li><li class="trade-tag"><a href="/drywall-takeoff">Drywall</a></li><li class="trade-tag"><a href="/flooring-takeoff">Finishes</a></li><li class="trade-tag"><a href="/door-window-takeoff">Doors &amp; windows</a></li>
-        </ul>
-        <p class="muted">Scope is confirmed after plan review. <a href="/resources">Free checklists for contractors</a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 07 CONSTRUCTION INTELLIGENCE -->
-  <section class="mass" aria-labelledby="ci-title">
-    <div class="seam-band" aria-hidden="true"></div>
+  <!-- 04 WHY CONTRACTORS USE IT -->
+  <section class="surface" aria-labelledby="problem-title">
     <div class="wrap">
-      <p class="label">Construction intelligence</p>
-      <h2 class="ci-statement reveal" id="ci-title">We don't guess. We quantify what the plans support, document the basis, and flag what needs a decision.</h2>
-      <ol class="rule-grid cols-3 reveal" style="margin-top:var(--sp-5)">
-        <li class="principle"><h3>01 Quantify</h3><p>Plan-based quantity takeoffs.</p></li>
-        <li class="principle"><h3>02 Check</h3><p>Quality control of our takeoff, and ambiguities flagged as questions.</p></li>
-        <li class="principle"><h3>03 Support</h3><p>Structured bid information that fits your own estimating workflow.</p></li>
-      </ol>
-      <p class="ci-tagline">Built for contractors who would rather know than guess.</p>
+      <p class="label">How it fits</p>
+      <h2 class="statement reveal" id="problem-title">You already have the plans. <span>You need the quantities.</span></h2>
+      <p class="lead">Contractors don't need another complicated platform just to get quantities from a plan set. This sits alongside the way you already work.</p>
+      <ul class="rule-grid cols-4 facts reveal">
+        <li><span class="label">No new software</span><p>Nothing to install or maintain between bids.</p></li>
+        <li><span class="label">No implementation</span><p>Send the plans for one project.</p></li>
+        <li><span class="label">No learning curve</span><p>Works alongside Bluebeam, PlanSwift, Excel or your own tools.</p></li>
+        <li><span class="label">No back-office system</span><p>Estimating, pricing and bidding decisions stay with you.</p></li>
+      </ul>
+      <p class="why-close"><strong>We don't guess. We quantify what the plans support, document the basis, and flag what needs a decision.</strong> Built for contractors who would rather know than guess.</p>
     </div>
   </section>
 
-  <!-- 08 TRUST + SCOPE -->
+  <!-- 05 TRUST + FOUNDER -->
   <section id="trust" aria-labelledby="scope-title">
     <div class="wrap">
       <p class="label">What you can count on</p>
@@ -748,9 +698,7 @@
       <div class="grid">
         <div class="c-5">
           <p class="claim">One documented process. One human review.</p>
-          <p class="label method">Plan → Scope → Quantify → Check → Document</p>
           <p class="method-proof">Every quantity has a source. Ambiguities we find are flagged, not guessed. Every deliverable is reviewed before it reaches you.</p>
-          <p class="scope-lead muted"><strong style="color:var(--text)">Scope:</strong> reading and quantifying what is drawn, item counts, measurements, and organized lists. Not engineering judgment, not structural calculation, not code compliance review, and not a substitute for a licensed engineer's seal where one is required.</p>
         </div>
         <dl class="schedule c-7">
           <div class="schedule-row"><dt>Review</dt><dd>Every takeoff is checked and reviewed before delivery, following the four-step process above.</dd></div>
@@ -763,52 +711,8 @@
     </div>
   </section>
 
-  <!-- 09 FAQ -->
-  <section class="surface" id="faq" aria-labelledby="faq-title">
-    <div class="wrap grid">
-      <div class="c-4">
-        <p class="label">FAQ</p>
-        <h2 id="faq-title">Common questions</h2>
-      </div>
-      <div class="c-8 faq-list">
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1"><span>Can you work with my plans?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-1" role="region" aria-labelledby="faq-q-1"><div class="a-inner"><p>Yes, if they are PDF, image, or CAD files, for residential or commercial projects. Tell us the trades you need, for example concrete, framing, drywall or finishes, and the scope is confirmed after the plans are reviewed. Large plan sets are fine: share a Google Drive, Dropbox or OneDrive link instead of attaching. If anything is missing or unreadable, you'll hear about it before work starts.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2"><span>How accurate is the takeoff?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-2" role="region" aria-labelledby="faq-q-2"><div class="a-inner"><p>Every takeoff is quality-checked and then reviewed by Vanessa before it reaches you. Anything unclear in the plans is raised with you instead of guessed at.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3"><span>How fast can you turn it around?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-3" role="region" aria-labelledby="faq-q-3"><div class="a-inner"><p>It depends on the size and condition of your plan set. You'll get a confirmed turnaround once your drawings are reviewed, before any work starts.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4"><span>What exactly do I receive?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-4" role="region" aria-labelledby="faq-q-4"><div class="a-inner"><p>A structured quantity takeoff in an Excel workbook, organized by item and area, with the drawing sheets and revision it is based on, ready to drop into your estimate. It comes with the plan sheets marked up in PDF, so you can see what was measured, and an assumptions and exclusions sheet listing what the takeoff does and does not include. See the <a href="#takeoff">sample layout</a>.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5"><span>Why not just use estimating software?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-5" role="region" aria-labelledby="faq-q-5"><div class="a-inner"><p>Software still needs someone to set it up, learn it, read the plans and enter the data. Here there is no setup, no learning curve and no estimating workflow to maintain between bids: you send the plans for one project and receive organized quantities. If you already use Bluebeam, PlanSwift or another tool, the Excel takeoff can sit alongside your own workflow.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-6" id="faq-q-6"><span>Why not just hire an estimator?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-6" role="region" aria-labelledby="faq-q-6"><div class="a-inner"><p>An estimator on staff costs more than a single bid needs. This is built for the project in front of you, with no ongoing commitment.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-7" id="faq-q-7"><span>Who reviews the work before I see it?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-7" role="region" aria-labelledby="faq-q-7"><div class="a-inner"><p>Vanessa Vieira, the founder, personally reviews every takeoff before it is delivered.</p></div></div>
-        </div>
-        <div class="faq-item">
-          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-8" id="faq-q-8"><span>What if something in the plans is unclear?</span><span class="chevron" aria-hidden="true"></span></button></h3>
-          <div class="faq-a" id="faq-a-8" role="region" aria-labelledby="faq-q-8"><div class="a-inner"><p>You'll be contacted directly before anything is finalized. Unclear drawings are never guessed at.</p></div></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 10 FOUNDER -->
-  <section id="about" aria-labelledby="about-title">
+  <!-- 05b FOUNDER -->
+  <section class="surface" id="about" aria-labelledby="about-title">
     <div class="wrap grid">
       <div class="c-5">
         <p class="label">Founder & Construction Intelligence Lead</p>
@@ -834,7 +738,7 @@
     </div>
   </section>
 
-  <!-- 11 FINAL CTA + FORM -->
+  <!-- 06 SEND YOUR PLANS (form) -->
   <section id="submit" aria-labelledby="final-title">
     <div class="mass final">
       <div class="seam-band" aria-hidden="true"></div>
@@ -873,7 +777,7 @@
               <div class="field upload-only">
                 <div class="dropzone" id="dropzone">
                   <input id="plans" class="dz-input" type="file" multiple aria-describedby="dz-hint">
-                  <label for="plans" class="dz-title">Drag your plans here, or <span class="dz-link">choose files</span></label>
+                  <label for="plans" class="dz-title"><span class="dz-drag">Drag your plans here, or </span><span class="dz-link">choose files</span></label>
                   <span class="hint" id="dz-hint">PDF, CAD (DWG, DXF, RVT, IFC), images, ZIP, Excel or Word, up to 500 MB each. Uploading starts right away. Sending a whole project folder? Compress it into a ZIP first.</span>
                 </div>
                 <ul class="upload-list" id="upload-list"></ul>
@@ -943,6 +847,51 @@
       </div>
     </div>
   </section>
+
+  <!-- 07 FAQ -->
+  <section class="surface" id="faq" aria-labelledby="faq-title">
+    <div class="wrap grid">
+      <div class="c-4">
+        <p class="label">FAQ</p>
+        <h2 id="faq-title">Common questions</h2>
+      </div>
+      <div class="c-8 faq-list">
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-1" id="faq-q-1"><span>Can you work with my plans?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-1" role="region" aria-labelledby="faq-q-1"><div class="a-inner"><p>Yes, if they are PDF, image, or CAD files, for residential or commercial projects. Tell us the trades you need, for example concrete, framing, drywall or finishes, and the scope is confirmed after the plans are reviewed. Large plan sets are fine: share a Google Drive, Dropbox or OneDrive link instead of attaching. If anything is missing or unreadable, you'll hear about it before work starts.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-2" id="faq-q-2"><span>How accurate is the takeoff?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-2" role="region" aria-labelledby="faq-q-2"><div class="a-inner"><p>Every takeoff is quality-checked and then reviewed by Vanessa before it reaches you. Anything unclear in the plans is raised with you instead of guessed at.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-3" id="faq-q-3"><span>How fast can you turn it around?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-3" role="region" aria-labelledby="faq-q-3"><div class="a-inner"><p>It depends on the size and condition of your plan set. You'll get a confirmed turnaround once your drawings are reviewed, before any work starts.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-4" id="faq-q-4"><span>What exactly do I receive?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-4" role="region" aria-labelledby="faq-q-4"><div class="a-inner"><p>A structured quantity takeoff in an Excel workbook, organized by item and area, with the drawing sheets and revision it is based on, ready to drop into your estimate. It comes with the plan sheets marked up in PDF, so you can see what was measured, and an assumptions and exclusions sheet listing what the takeoff does and does not include. See the <a href="#takeoff">sample layout</a>.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-5" id="faq-q-5"><span>Why not just use estimating software?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-5" role="region" aria-labelledby="faq-q-5"><div class="a-inner"><p>Software still needs someone to set it up, learn it, read the plans and enter the data. Here there is no setup, no learning curve and no estimating workflow to maintain between bids: you send the plans for one project and receive organized quantities. If you already use Bluebeam, PlanSwift or another tool, the Excel takeoff can sit alongside your own workflow.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-6" id="faq-q-6"><span>Why not just hire an estimator?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-6" role="region" aria-labelledby="faq-q-6"><div class="a-inner"><p>An estimator on staff costs more than a single bid needs. This is built for the project in front of you, with no ongoing commitment.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-7" id="faq-q-7"><span>Who reviews the work before I see it?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-7" role="region" aria-labelledby="faq-q-7"><div class="a-inner"><p>Vanessa Vieira, the founder, personally reviews every takeoff before it is delivered.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <h3><button class="faq-q" aria-expanded="false" aria-controls="faq-a-8" id="faq-q-8"><span>What if something in the plans is unclear?</span><span class="chevron" aria-hidden="true"></span></button></h3>
+          <div class="faq-a" id="faq-a-8" role="region" aria-labelledby="faq-q-8"><div class="a-inner"><p>You'll be contacted directly before anything is finalized. Unclear drawings are never guessed at.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <div class="sticky-cta" id="sticky-cta">
@@ -984,7 +933,7 @@
   </div>
 </footer>
 
-<script src="assets/uploader.js?v=20261123e"></script>
+<script src="assets/uploader.js?v=20261123f"></script>
 <script>
 (function(){
   var form = document.getElementById('project-form');
@@ -1041,8 +990,14 @@
     var label = button.innerHTML;
     button.disabled = true;
     button.textContent = fileCount ? 'Finishing upload…' : 'Sending…';
+    // While files are still going up, say how many are left.
+    var ticker = fileCount ? setInterval(function(){
+      var n = uploads.pending();
+      if (n){ button.textContent = 'Finishing upload · ' + n + (n === 1 ? ' file left' : ' files left'); }
+    }, 500) : null;
     (uploads ? uploads.finish() : Promise.resolve([]))
       .then(function(lines){
+        clearInterval(ticker);
         button.textContent = 'Sending…';
         var data = new FormData(form);
         if (lines.length){ data.append('uploaded_files', lines.join('\n')); }
