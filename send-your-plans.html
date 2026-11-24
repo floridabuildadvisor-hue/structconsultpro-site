@@ -90,7 +90,7 @@
   ]
 }
 </script>
-<link rel="stylesheet" href="/assets/site.css?v=20261123f">
+<link rel="stylesheet" href="/assets/site.css?v=20261123h">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -227,7 +227,18 @@
               </div>
               <div class="row-2">
                 <div class="field"><label for="project">Project name</label><input id="project" name="project_name"></div>
-                <div class="field"><label for="location">Location</label><input id="location" name="location" placeholder="City and county, for example Miami Dade, FL"></div>
+                <div class="field"><label for="location">City</label><input id="location" name="location" placeholder="For example Hialeah"></div>
+              </div>
+              <div class="field">
+                <label for="county">Project county</label>
+                <select id="county" name="county">
+                  <option value="">Select…</option>
+                  <option>Miami-Dade</option>
+                  <option>Broward</option>
+                  <option>Palm Beach</option>
+                  <option>Other Florida county</option>
+                  <option>Outside Florida</option>
+                </select>
               </div>
               <div class="row-2">
                 <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
@@ -287,7 +298,7 @@
               </div>
             </fieldset>
             <div class="form-actions">
-              <p class="privacy-note">Your project details and files are used to prepare your quantity takeoff and to communicate with you about the request. We do not sell your information.</p>
+              <p class="privacy-note">Your project details and files are used to prepare your quantity takeoff and to communicate with you about the request. We do not sell your information. Visits and form steps are counted anonymously, without cookies, to improve the site.</p>
               <button class="btn btn-primary" type="submit">Send takeoff request <span class="arrow" aria-hidden="true">→</span></button>
             </div>
           </form>
@@ -375,8 +386,9 @@
   </div>
 </footer>
 
-<script src="/assets/site.js?v=20261123f"></script>
-<script src="/assets/uploader.js?v=20261123f"></script>
+<script src="/assets/site.js?v=20261123h"></script>
+<script src="/assets/track.js?v=20261123h"></script>
+<script src="/assets/uploader.js?v=20261123h"></script>
 
 <script>
 (function(){
